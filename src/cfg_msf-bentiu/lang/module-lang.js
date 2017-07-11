@@ -327,10 +327,10 @@ g.module_lang.text.eng = {
 	},
 	jumpto: 'Goto...',
 	map_admN1: {
-		title: 'Sectors'
+		title: 'Sections'
 	},
 	map_admN2: {
-		title: 'Blocks'
+		title: 'Villages'
 	},/* 
 	map_admN3: {
 		title: 'Cellule'

@@ -115,14 +115,16 @@ g.module_colorscale.mapunitlist = ['Cases','Deaths','IncidenceProp','MortalityPr
  */
 g.module_getdata = {
     geometry: {
+        /*
         admN1: {
             method:  'geometryd3',
-            options: {  url: './data/geo_adm10.geojson',
+            options: {  url: './data/admin3.json',
                         type: 'json'}
             },
+        */
         admN2: {
             method:  'geometryd3',
-            options: {  url: './data/geo_adm11.geojson',
+            options: {  url: './data/nixon4.json',
                         type: 'json'}
             }
     },
@@ -132,11 +134,10 @@ g.module_getdata = {
             options: {  url: '',
                         type: ''}
         } */
-		points:{
+        admN1:{
             method: 'd3',
-            options: {  url: './data/geo_orps.geojson',
-                        type: 'json',
-						front: true}
+            options: {url: './data/admin3.json',
+                      type: 'json'}
         } 
     },
     medical:{
@@ -166,9 +167,9 @@ g.module_getdata = {
 
 g.medical_headerlist = {
     epiwk: 'EpiWk',     // Epidemiological week: format YYYY-WW
-    admN1: 'Geo_L1',    // Name of administrative/health division level N1 
-    admN2: 'Geo_L2',    // Name of administrative/health division level N2
-    age: 'Age_y',         // Age of patient in years
+    admN1: 'Chiefdom',    // Name of administrative/health division level N1 
+    admN2: 'Section',    // Name of administrative/health division level N2
+    age: 'Age',         // Age of patient in years
     sex: 'Sex',         // Sex: 1 = Male, 2 = Female 
     preg: 'Pregnant',   // Pregnancy: 1 = Pregnant, 2 = Not Pregnant or N/A
     sev: 'Dehydr_Adm',  // Dehydratiation severity: A = Light, B = Moderate, C = Severe
@@ -245,14 +246,14 @@ if(!g.module_datacheck){
 }
 g.module_datacheck.definition_value = {
     epiwk:  {test_type: 'epiwk',        setup: 'none'},     // Epidemiological week: format YYYY-WW
-    admN1:  {test_type: 'ingeometry',   setup: 'none'}, // Name of division level N1 
-    admN2:  {test_type: 'ingeometry',   setup: 'none'}, // Name of division level N1 
+    admN1:  {test_type: 'none',         setup: 'none'}, // Name of division level N1 
+    admN2:  {test_type: 'ingeometry',   setup: 'none'}, // Name of division level N2 
     age:    {test_type: 'integer',      setup: 'none'},     // Age of patient in years
-    sex:    {test_type: 'inlist',       setup: ["1","2"]},  // Sex: 1 = Male, 2 = Female 
-    preg:   {test_type: 'inlist',       setup: ["1","2"]},  // Pregnancy: 1 = Pregnant, 2 = Not Pregnant
-    sev:    {test_type: 'inlist',       setup: ["A","B","C"]},  // Dehydratiation severity: A = Light, B = Moderate, C = Severe
-    dur:    {test_type: 'integer',      setup: 'none'},     // Stay duration in days
-    out:    {test_type: 'inlist',       setup: ["1","2","3","4"]}   // Outcome: 1 = Cured, 2 = Dead, 3 = Interrupted F/U, 4 = Transfered
+    sex:    {test_type: 'inlist',       setup: ["M","F"]},  // Sex: 1 = Male, 2 = Female 
+    preg:   {test_type: 'none',         setup: 'none'},  // Pregnancy: 1 = Pregnant, 2 = Not Pregnant
+    sev:    {test_type: 'none',         setup: 'none'},  // Dehydratiation severity: A = Light, B = Moderate, C = Severe
+    dur:    {test_type: 'none',         setup: 'none'},     // Stay duration in days
+    out:    {test_type: 'none',         setup: 'none'}   // Outcome: 1 = Cured, 2 = Dead, 3 = Interrupted F/U, 4 = Transfered
 };
 
 /**

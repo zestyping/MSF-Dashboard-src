@@ -48,7 +48,6 @@ g.module_lang.current = 'eng';
  * @alias module:module_lang.list
  */
 g.module_lang.list = {
-	'fra':'French',
 	'eng':'English',
 	//'cas':'Castilian'
 	};
@@ -111,7 +110,7 @@ module_lang.display = function() {
 // 1) French
 //------------------------------------------------------------------------------------
 g.module_lang.text.fra = {
-	main_title: 'MSF Dashboard v1.0.0 | Outbreak Bentiu',
+	main_title: 'MSF Dashboard v1.0.0 \u00b7 Nixon Memorial Hospital',
 	main_description: 'VERSION DE DEMONSTRATION. Cette version du Dashboard MSF prend en entrée des données de outbreak. Si vous rencontrez des problèmes lors de l\'utilisation de cet outil, que vous souhaitez poser des questions ou faire des retours, n\'hésitez pas à contacter : Manson Unit, MSF UK via <a href="mailto:gis.mansonunit@london.msf.org">gis.mansonunit@london.msf.org</a>.',
 
 	loadfiles_choose: 'CHOISISSEZ UN FICHIER A CHARGER',
@@ -267,11 +266,11 @@ g.module_lang.text.fra = {
 // 2) English
 //------------------------------------------------------------------------------------
 g.module_lang.text.eng = {
-	main_title: 'MSF Dashboard v1.0.0 | Outbreak Bentiu',
-	main_description: 'DEMO VERSION. This version of Dashboard MSF uses demo outbreak data. If you have any issues with the tool or would like to provide feedback or ask questions, please contact the MSF UK Manson Unit at <a href="mailto:gis.mansonunit@london.msf.org">gis.mansonunit@london.msf.org</a>.',
+	main_title: 'MSF Dashboard v1.0.0 \u00b7 Nixon Memorial Hospital',
+	main_description: 'For feedback or questions, please contact the MSF UK Manson Unit at <a href="mailto:gis.mansonunit@london.msf.org">gis.mansonunit@london.msf.org</a>.',
 
 	loadfiles_choose: 'CHOOSE A FILE TO LOAD',
-	loadfiles_selected: ['The file currently selected counts','records.'],
+	loadfiles_selected: ['The file currently selected contains','records.'],
 	loadfiles_load: 'Load the Dashboard',
 
 	chart_epiwk_title: 'Epidemiological Week',

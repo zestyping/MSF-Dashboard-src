@@ -122,7 +122,7 @@ g.module_getdata = {
                         type: 'json'}
             },
         */
-        admN2: {
+        admN1: {
             method:  'geometryd3',
             options: {  url: './data/nixon4.json',
                         type: 'json'}
@@ -134,7 +134,7 @@ g.module_getdata = {
             options: {  url: '',
                         type: ''}
         } */
-        admN1:{
+        admN0:{
             method: 'd3',
             options: {url: './data/admin3.json',
                       type: 'json'}
@@ -167,8 +167,8 @@ g.module_getdata = {
 
 g.medical_headerlist = {
     epiwk: 'EpiWk',     // Epidemiological week: format YYYY-WW
-    admN1: 'Chiefdom',    // Name of administrative/health division level N1 
-    admN2: 'Section',    // Name of administrative/health division level N2
+    admN0: 'Chiefdom',    // Name of administrative/health division level N1 
+    admN1: 'Section',    // Name of administrative/health division level N2
     age: 'Age',         // Age of patient in years
     sex: 'Sex',         // Sex: 1 = Male, 2 = Female 
     preg: 'Pregnant',   // Pregnancy: 1 = Pregnant, 2 = Not Pregnant or N/A
@@ -207,16 +207,6 @@ function main_loadfiles_readvar(){
      * @todo Why is it in a function?
      */
     g.medical_read = {
-        out:        {'1':g.module_lang.text[g.module_lang.current].chart_out_label1,
-                     '2':g.module_lang.text[g.module_lang.current].chart_out_label2,
-                     '3':g.module_lang.text[g.module_lang.current].chart_out_label3,
-                     '4':g.module_lang.text[g.module_lang.current].chart_out_label4},
-        sev:        {A:g.module_lang.text[g.module_lang.current].chart_sev_labelA,
-                     B:g.module_lang.text[g.module_lang.current].chart_sev_labelB,
-                     C:g.module_lang.text[g.module_lang.current].chart_sev_labelC},
-        sexpreg:    {'12':g.module_lang.text[g.module_lang.current].chart_sexpreg_label12,
-                     '22':g.module_lang.text[g.module_lang.current].chart_sexpreg_label22,
-                     '21':g.module_lang.text[g.module_lang.current].chart_sexpreg_label21},
     };
 }
 
@@ -246,8 +236,8 @@ if(!g.module_datacheck){
 }
 g.module_datacheck.definition_value = {
     epiwk:  {test_type: 'epiwk',        setup: 'none'},     // Epidemiological week: format YYYY-WW
-    admN1:  {test_type: 'none',         setup: 'none'}, // Name of division level N1 
-    admN2:  {test_type: 'ingeometry',   setup: 'none'}, // Name of division level N2 
+    admN0:  {test_type: 'none',         setup: 'none'}, // Name of division level N1 
+    admN1:  {test_type: 'ingeometry',   setup: 'none'}, // Name of division level N2 
     age:    {test_type: 'integer',      setup: 'none'},     // Age of patient in years
     sex:    {test_type: 'inlist',       setup: ["M","F"]},  // Sex: 1 = Male, 2 = Female 
     preg:   {test_type: 'none',         setup: 'none'},  // Pregnancy: 1 = Pregnant, 2 = Not Pregnant
@@ -425,86 +415,6 @@ g.viz_definition = {
                 display_filter: true,
                 buttons_list: ['reset','help'],
                 
-            },
-
-    sexpreg:{   domain_builder: 'none',
-                domain_parameter: 'none',
-
-                instance_builder: 'pie',
-
-                dimension_builder: 'readncombcat',       
-                dimension_parameter: {  column: ['sex','preg'],
-                                        shared: false,
-                                        namespace: 'none'},
-
-                group_builder: 'auto',
-                group_parameter: {  column: ['none']},
-                
-                display_colors: [4,2,1],        
-                display_intro: 'left',
-                display_filter: true,
-                buttons_list: ['reset','help'],
-            },
-
-    sev:    {   domain_builder: 'none',
-                domain_parameter: 'none',
-
-                instance_builder: 'pie',
-
-                dimension_builder: 'readcat',       
-                dimension_parameter: {  column: ['sev'],
-                                        shared: false,
-                                        namespace: 'none'},
-
-                group_builder: 'auto',
-                group_parameter: {  column: ['none']},
-                
-                display_colors: [1,2,4],        
-                display_intro: 'left',
-                display_filter: true,
-                buttons_list: ['reset','help'],
-            },
-
-    dur:    {   domain_builder: 'integer_ordinal',
-                domain_parameter: 'custom_ordinal',
-
-                instance_builder: 'bar',
-
-                dimension_builder: 'integer',       
-                dimension_parameter: {  column: ['dur'],
-                                        shared: false,
-                                        namespace: 'none'},       
-  
-                group_builder: 'auto',
-                group_parameter: {  column: ['none']},
-
-                display_axis:   {x:g.module_lang.text[g.module_lang.current].chart_dur_labelx,
-                                 y:g.module_lang.text[g.module_lang.current].chart_dur_labely},
-                display_colors: [4],            
-                display_intro: 'left',
-                display_filter: true,
-                buttons_list: ['reset','help'],
-            },
-
-    out:    {   domain_builder: 'readcat',
-                domain_parameter: 'custom_ordinal',
-
-                instance_builder: 'bar',
-
-                dimension_builder: 'readcat',       
-                dimension_parameter: {  column: ['out'],
-                                        shared: false,
-                                        namespace: 'none'},
-
-                group_builder: 'auto',
-                group_parameter: {  column: ['none']},
-
-                display_axis:   {x:g.module_lang.text[g.module_lang.current].chart_out_labelx,
-                                 y:g.module_lang.text[g.module_lang.current].chart_out_labely},
-                display_colors: [4],            
-                display_intro: 'left',
-                display_filter: true,
-                buttons_list: ['reset','help'],
             },
 
     table:  {   domain_builder: 'none',

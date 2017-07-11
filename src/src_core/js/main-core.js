@@ -523,6 +523,7 @@ function generateDashboard(){
             },
             readncombcat: function(key){
                 var dimension = cf.dimension(function(rec) {
+                    console.log('readncombcat', rec, key);
                     var val = rec[g.medical_headerlist[key[0]]].toString() + rec[g.medical_headerlist[key[1]]].toString();
                     var read = g.medical_read[''+key[0]+key[1]][val];
                     if(!read){read = 'NA';}

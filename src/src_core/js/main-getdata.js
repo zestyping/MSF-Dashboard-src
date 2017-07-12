@@ -440,55 +440,56 @@ module_getdata.load_medical_xls = function() {
     /* Call XLSX */
     var workbook = XLSX.read(data, {type:"binary"});
     var input = workbook.Sheets['input'];
-    var firstRow = 2 ;
-    var lastRow = input['!ref'].split(':')[1].replace( /^\D+/g, '');
 
-    var firstCol = lettersToNumbers('A');
-    var lastCol = lettersToNumbers('J');
-
-    for (var r = firstRow; r <= lastRow;r++) {
-
-        var test_empty = true;
-        var temp_array = [];
-
-
-
-        for (var c = firstCol; c <= lastCol+1; c++) {
-
-            val = (typeof input[numbersToLetters(c) + r] !== 'undefined') ? input[numbersToLetters(c) + r].v : undefined;
-
-            if(val !== undefined){
-                test_empty = false;
-            }
-
-            temp_array.push(val);
-        }
-
-        if(!test_empty){       //TODO: Order of xlsx headings is significant here; need to get correctly named column heading instead of it being sequential
-            temp_data = {};
-            temp_data['Region'] = temp_array[0];
-            temp_data[g.medical_headerlist['admN1']] = temp_array[1];
-            temp_data[g.medical_headerlist['admN2']] = temp_array[2];
-            temp_data[g.medical_headerlist['epiwk']] = temp_array[3];
-            temp_data[g.medical_headerlist['disease']] = temp_array[4];
-            temp_data[g.medical_headerlist['case']] = temp_array[5];
-            temp_data[g.medical_headerlist['death']] = temp_array[6];
-            temp_data[g.medical_headerlist['date']] = temp_array[7];
-            temp_data[g.medical_headerlist['source']] = temp_array[8];
-            temp_data[g.medical_headerlist['comment']] = temp_array[9];
-
-            medical_data.push(     
-                temp_data
-            );
-        }
-
+    /* Get header row */
+    var normalize = function(name) {
+        // When matching header names, ignore capitalization, spaces,
+        // and parenthesized parts.
+        return (name || '').replace(
+            /\(.*?\)/g, ' ').replace(/ +/g, ' ').trim().toLowerCase();
     };
 
+    var colIndexes = {};
+    for (var c = 1; c <= 20; c++) {
+        var header = (input[numbersToLetters(c) + '1'] || {}).v;
+        for (var key in g.medical_headerlist) {
+            if (normalize(header) == normalize(g.medical_headerlist[key])) {
+                colIndexes[key] = c - 1;
+            }
+        }
+    }
+    console.log('column headers found in ' + name + ':', colIndexes);
+
+    /* Get data rows */
+    var lastCell = input['!ref'].split(':')[1];
+    var lastCol = lastCell.replace(/\d+/, '');
+    var lastRow = lastCell.replace(/\D+/, '');
+
+    for (var r = 2; r <= lastRow; r++) {
+        var dataRow = [];
+        var populatedCells = 0;
+
+        for (var c = 1; c <= lettersToNumbers(lastCol); c++) {
+            var value = (input[numbersToLetters(c) + r] || {}).v || '';
+            dataRow.push(value);
+            populatedCells += (value !== '');
+        }
+
+        if (populatedCells > 0) {
+            record = {};
+            for (var key in g.medical_headerlist) {
+                record[g.medical_headerlist[key]] = dataRow[colIndexes[key]];
+            }
+            medical_data.push(record);
+        }
+    };
+    console.log('records loaded from ' + name + ':', medical_data.length);
+
     function numbersToLetters(num) {
-      for (var ret = '', a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
-        ret = String.fromCharCode(parseInt((num % b) / a) + 65) + ret;
-      }
-      return ret;
+        for (var ret = '', a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
+            ret = String.fromCharCode(parseInt((num % b) / a) + 65) + ret;
+        }
+        return ret;
     }
 
     function lettersToNumbers(string) {
@@ -500,9 +501,7 @@ module_getdata.load_medical_xls = function() {
         return sum;
     }
     g.medical_data = medical_data;
-    //console.log("g.medical_data = ", g.medical_data); 
     module_getdata.afterload_medical_d3(medical_data);
-
 };
 
 // d3.js (local file)

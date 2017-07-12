@@ -43,6 +43,11 @@
     border-radius: 5px;
     font-size:0.9em;
 }
+
+.info.legend table td { /* numbers in legend scales */
+    text-align: right;
+}
+
  /* Hover over map features style (bypass dc.leaflet.js) */
 .hdx-3w-info{
     padding:5px;

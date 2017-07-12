@@ -142,16 +142,15 @@ g.module_getdata = {
     },
     medical:{
         medical: {
-            method: 'medicalfs',
-            options: {  url: './input/',
-                        type: 'csv'}      
+            method: 'medicalxlsx',
+            options: {url: './input/', type: 'xlsx'}
         }
     },
     population:{
         pop: {
             method: 'populationd3',
             options: {  url: './data/pop.csv',
-                        type: 'csv'}   
+                        type: 'csv'}
         }
     } 
 };

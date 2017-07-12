@@ -274,7 +274,7 @@ g.module_lang.text.eng = {
 	loadfiles_load: 'Load the Dashboard',
 
 	chart_date_title: 'Date',
-	chart_date_labelx: 'Date',
+	chart_date_labelx: '',
 	chart_date_labely: 'Cases',
 	chart_epiwk_title: 'Epidemiological Week',
 	chart_epiwk_labelx: 'Epi Week',
@@ -291,7 +291,7 @@ g.module_lang.text.eng = {
 	chart_dur_labelx: 'Stay Duration',
 	chart_dur_labely: 'Cases',
 	chart_age_title: 'Age',
-	chart_age_labelx: 'Age',
+	chart_age_labelx: '',
 	chart_age_labely: 'Cases',
 	chart_out_title: 'Outcome',
 	chart_out_labelx: 'Outcome',

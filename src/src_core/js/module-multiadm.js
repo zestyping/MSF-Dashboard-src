@@ -151,7 +151,7 @@ module_multiadm.display = function(){
 
 	// Maps
 	html += '<div class="row">';
-	html += '<div class="col-md-12 viz" style="height:425px; width:108%;">';
+	html += '<div class="col-md-12 viz chart-multiadm" style="height:425px; width:108%;">';
 		g.geometry_keylist.forEach(function(key){
 			html += '<div id="map-'+key+'" class="map"></div>'; 
 		});

@@ -21,7 +21,14 @@
         </script>
         <script src="../src_core/js/main-getlibs.js"></script>
         <style>
+          h2#main_title { margin-top: 8px; }
+          #main_description { opacity: 0.5; }
+          #chart-multiadm > .row:first-child { position: absolute; right: 0; }
           div.buttons-right { position: absolute; right: 0; }
+          /* Reduce space wasted by empty bottom margin in SVG charts. */
+          #chart-date svg { margin-bottom: -60px; }
+          #chart-age svg { margin-bottom: -60px; }
+          #menu_count b { font-size: 140%; }
         </style>
     </head>
     <body>

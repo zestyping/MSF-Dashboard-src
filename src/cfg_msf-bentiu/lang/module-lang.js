@@ -301,6 +301,9 @@ g.module_lang.text.eng = {
 	chart_out_label4: 'Transf.',
 	chart_out_labely: 'Cases',
 
+	chart_diagnosis_title: 'Diagnoses',
+	chart_diagnosis_labelx: 'Cases',
+	chart_diagnosis_labely: 'Diagnosis',
 	chart_disease_title: 'Diseases',
 	chart_disease_labelx: 'Times Reported',
 	chart_disease_labely: 'Diseases',

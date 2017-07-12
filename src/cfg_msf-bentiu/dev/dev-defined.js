@@ -432,6 +432,28 @@ g.viz_definition = {
                 
             },
 
+    diagnosis: {
+        domain_builder: 'custom_ordinal',
+        domain_parameter: 'none',
+        instance_builder: 'row',
+        dimension_builder: 'auto',
+        dimension_parameter: {
+            column: 'diagnosis',
+            shared: false,
+            namespace: 'none'
+        },
+        group_builder: 'auto',
+        group_parameter: {column: 'none'},
+        display_axis: {
+            x: g.module_lang.text[g.module_lang.current].chart_diagnosis_labelx,
+            y: g.module_lang.text[g.module_lang.current].chart_diagnosis_labely
+        },
+        display_colors: [2],
+        display_intro_position: 'left',
+        display_filter: true,
+        buttons_list: ['reset','help']
+    },
+
     table:  {   domain_builder: 'none',
                 domain_parameter: 'none',            
                 
@@ -457,7 +479,7 @@ g.viz_definition = {
  * @type {String} 
  * @alias module:g.viz_timeline
  */
-g.viz_timeline = 'epiwk';
+g.viz_timeline = 'date';
 
 /**
  Defines the charts that are using time dimensions and that should be synchronized with the reference defined with {@link module:g.viz_timeline}.

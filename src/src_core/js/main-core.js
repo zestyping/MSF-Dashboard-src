@@ -2486,6 +2486,12 @@ function generateDashboard(){
     // Initiate
     module_colorscale.lockcolor(g.module_colorscale.modecurrent);
 
+    // Reset all filters
+    for (var key in g.viz_definition) {
+        var chart = g.viz_definition[key].chart;
+        if (chart) chart.filterAll();
+    }
+
     $('#modal').modal('hide');
 }
 

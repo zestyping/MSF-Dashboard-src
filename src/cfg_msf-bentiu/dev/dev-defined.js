@@ -166,6 +166,7 @@ g.module_getdata = {
 
 g.medical_headerlist = {
     date: 'Date',       // Date
+    id: 'OP No',        // Outpatient ID number
     epiwk: 'EpiWk',     // Epidemiological week: format YYYY-WW
     admN0: 'Chiefdom',  // Administrative division level for coarse boundaries
     admN1: 'Section',   // Administrative division level for map shading
@@ -259,11 +260,10 @@ g.module_datacheck.definition_value = {
  * @alias module:module_datacheck.definition_record
  */
 g.module_datacheck.definition_record = [
-    {key: 'PatientID', isnumber: false}, // 'true' key as in data file
-    {key: g.medical_headerlist.epiwk, isnumber: false}, // 'true' key as in data file
-    {key: g.medical_headerlist.disease, isnumber: false}, // 'true' key as in data file
+    {key: g.medical_headerlist.date, isnumber: false}, // 'true' key as in data file
+    {key: g.medical_headerlist.id, isnumber: false}, // 'true' key as in data file
+    {key: g.medical_headerlist.admN0, isnumber: false}, // 'true' key as in data file
     {key: g.medical_headerlist.admN1, isnumber: false}, // 'true' key as in data file
-    {key: g.medical_headerlist.admN2, isnumber: false}, // 'true' key as in data file
 ];
 
 // 3) Chart parameters

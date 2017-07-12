@@ -477,7 +477,6 @@ module_getdata.load_medical_xls = function() {
             temp_data[g.medical_headerlist['source']] = temp_array[8];
             temp_data[g.medical_headerlist['comment']] = temp_array[9];
 
-            console.log('add record', temp_data);
             medical_data.push(     
                 temp_data
             );

@@ -523,7 +523,6 @@ function generateDashboard(){
             },
             readncombcat: function(key){
                 var dimension = cf.dimension(function(rec) {
-                    console.log('readncombcat', rec, key);
                     var val = rec[g.medical_headerlist[key[0]]].toString() + rec[g.medical_headerlist[key[1]]].toString();
                     var read = g.medical_read[''+key[0]+key[1]][val];
                     if(!read){read = 'NA';}
@@ -2361,8 +2360,10 @@ function generateDashboard(){
     module_multiadm.interaction();
     module_intro.setup();
     module_interface.display();
-    module_chartwarper.display(g.module_chartwarper.container_btns_id,g.module_chartwarper.container_chartlist);
-    module_chartwarper.interaction(g.module_chartwarper.container_chartlist);
+    if (g.module_chartwarper.container_chartlist) {
+        module_chartwarper.display(g.module_chartwarper.container_btns_id,g.module_chartwarper.container_chartlist);
+        module_chartwarper.interaction(g.module_chartwarper.container_chartlist);
+    }
     
 
     // Key figures

@@ -48,7 +48,7 @@ g.dev_defined = {};
  Currently accepted values are:
  <ul>
      <li><code>surveillance</code> (aggregated) or</li>
-     <li><code>outbreak</code> (linelist).</li>
+     eli><code>outbreak</code> (linelist).</li>
  </ul>
  * @constant
  * @type {String} 
@@ -167,14 +167,12 @@ g.module_getdata = {
 
 g.medical_headerlist = {
     epiwk: 'EpiWk',     // Epidemiological week: format YYYY-WW
-    admN0: 'Chiefdom',    // Name of administrative/health division level N1 
-    admN1: 'Section',    // Name of administrative/health division level N2
+    admN0: 'Chiefdom',  // Administrative division level for coarse boundaries
+    admN1: 'Section',   // Administrative division level for map shading
     age: 'Age',         // Age of patient in years
-    sex: 'Sex',         // Sex: 1 = Male, 2 = Female 
+    sex: 'Sex',         // Sex (M or F)
+    diagnosis: 'Diagnosis',
     preg: 'Pregnant',   // Pregnancy: 1 = Pregnant, 2 = Not Pregnant or N/A
-    sev: 'Dehydr_Adm',  // Dehydratiation severity: A = Light, B = Moderate, C = Severe
-    dur: 'StayDays',    // Stay duration in days
-    out: 'Outcome',     // Outcome: 1 = Cured, 2 = Dead, 3 = Interrupted F/U, 4 = Transfered
 };
 
 /**
@@ -235,15 +233,13 @@ if(!g.module_datacheck){
     g.module_datacheck = {}; 
 }
 g.module_datacheck.definition_value = {
-    epiwk:  {test_type: 'epiwk',        setup: 'none'},     // Epidemiological week: format YYYY-WW
-    admN0:  {test_type: 'none',         setup: 'none'}, // Name of division level N1 
-    admN1:  {test_type: 'ingeometry',   setup: 'none'}, // Name of division level N2 
-    age:    {test_type: 'integer',      setup: 'none'},     // Age of patient in years
-    sex:    {test_type: 'inlist',       setup: ["M","F"]},  // Sex: 1 = Male, 2 = Female 
-    preg:   {test_type: 'none',         setup: 'none'},  // Pregnancy: 1 = Pregnant, 2 = Not Pregnant
-    sev:    {test_type: 'none',         setup: 'none'},  // Dehydratiation severity: A = Light, B = Moderate, C = Severe
-    dur:    {test_type: 'none',         setup: 'none'},     // Stay duration in days
-    out:    {test_type: 'none',         setup: 'none'}   // Outcome: 1 = Cured, 2 = Dead, 3 = Interrupted F/U, 4 = Transfered
+    epiwk: {test_type: 'epiwk', setup: 'none'},
+    admN0: {test_type: 'none', setup: 'none'},
+    admN1: {test_type: 'ingeometry', setup: 'none'},
+    age: {test_type: 'integer', setup: 'none'},
+    sex: {test_type: 'inlist', setup: ["M","F"]},
+    diagnosis: {test_type: 'none', setup: 'none'},
+    preg: {test_type: 'none', setup: 'none'},
 };
 
 /**

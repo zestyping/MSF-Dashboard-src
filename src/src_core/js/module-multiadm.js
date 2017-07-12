@@ -559,7 +559,6 @@ module_multiadm.interaction = function(){
 	        // Initialize first jumpto
 		    var html = '<select class="select-adm" id="select-admN1">';
 		    html +='<option value="NA">'+g.module_lang.text[g.module_lang.current].jumpto+' ('+g.module_lang.text[g.module_lang.current]['map_admN1'].title+')'+'</option>';
-                    console.log('medical_loclists', g.medical_loclists);
 		    g.medical_loclists.admN1.sort().forEach(function(loc){
 		        html +='<option value="'+loc+'">'+loc+'</option>';
 		    });

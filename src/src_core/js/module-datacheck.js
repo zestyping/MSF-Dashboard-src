@@ -228,7 +228,6 @@ epiwk: function(rec,key,none){
 		ingeometry: function(rec,key,option){			  
 			var keylist = g.geometry_keylist;			
 			var count = g.geometry_levellist[key];		
-            console.log('ingeometry check', rec, key, option, keylist, count);
 
             if(option == 'normalize'){      
                 var loc_current = toTitleCase(rec[g.medical_headerlist[key]].trim().split('_').join(' '));
@@ -287,12 +286,9 @@ epiwk: function(rec,key,none){
                         loc_current = rec[g.medical_headerlist[keylist[count]]].trim().split('_').join(' ')+', '+loc_current;
                     }
                 }
-                console.log('loc_current', loc_current);
 
 	            var cond_1 = !(g.geometry_loclists[key].indexOf(loc_current) == -1);  	//true = loc_current is in list of geojson adm names
 				var cond_2 = g.medical_loclists[key].indexOf(loc_current) == -1;		//true = loc_current is not in medical locations list (because list not yet populated)
-                console.log('geometry_loclists[key]', g.geometry_loclists[key]);
-                console.log('medical_loclists[key]', g.medical_loclists[key]);
 				if(cond_1 && cond_2){		//checking if loc_current is in geojson and not yet in medical locations list
 					g.medical_loclists[key].push(loc_current);
 					g.medical_loclists.all.push(loc_current);
@@ -562,7 +558,6 @@ epiwk: function(rec,key,none){
 
 		var temp_key = rec[g.medical_headerlist.epiwk] + temp_loc;  //add epiweek to beginning of string
 		temp_loc = temp_loc.substring(2, temp_loc.length);			//remove ',' at beginning of string
-        console.log('temp_loc', temp_loc);
 
 		if(!(g.medical_completeness[temp_key])){					//if not already in g.medical_completeness
 			g.medical_completeness[temp_key] = {					//then add it
@@ -623,12 +618,10 @@ epiwk: function(rec,key,none){
 
 			} else {
 
-                console.log('geometry_keylist', g.geometry_keylist);
 				for (var i = g.geometry_keylist.length - 2; i >= 0; i--) {  //move through all parent layers to sum up completeness
 				 	var temp_loc = '';
 					for (var j = 0; j <= i; j++) {						//get name, e.g. j=0,1 then j=0
                         var value = rec[g.medical_headerlist[g.geometry_keylist[j]]] || '';
-                        console.log('checking geom', [g.geometry_keylist[j], value], 'in', rec);
 						if(g.module_datacheck.definition_value[g.geometry_keylist[j]].setup == 'normalize'){		
 							temp_loc += ', ' + toTitleCase(value.trim().split('_').join(' '));
 						}else{

@@ -449,6 +449,24 @@ module_getdata.load_medical_xls = function() {
             /\(.*?\)/g, ' ').replace(/ +/g, ' ').trim().toLowerCase();
     };
 
+    var fix_date = function(value) {
+        if (typeof value === 'number') {
+            var excel_epoch = new Date(1899, 11, 30); // Dec 30, 1899
+            var date = new Date(excel_epoch.getTime() + (value * 86400 * 1000));
+            return date.toISOString().substr(0, 10);
+        }
+        if (typeof value === 'string') {  // sadly, assume d/m/y
+            var parts = value.split(/[.-/]/);
+            if (parts.length === 3) {
+                if (parts[2].length < 3) parts[2] = '20' + parts[2];
+                // JS counts months from 0 to 11, but days from 1 to 31.
+                var date = new Date(parts[2], parts[1] - 1, parts[0]);
+                return date.toISOString().substr(0, 10);
+            }
+        }
+        return value;
+    };
+
     var colIndexes = {};
     for (var c = 1; c <= 20; c++) {
         var header = (input[numbersToLetters(c) + '1'] || {}).v;
@@ -471,6 +489,9 @@ module_getdata.load_medical_xls = function() {
 
         for (var c = 1; c <= lettersToNumbers(lastCol); c++) {
             var value = (input[numbersToLetters(c) + r] || {}).v || '';
+            if (colIndexes['date'] === dataRow.length) {
+                value = fix_date(value);
+            }
             dataRow.push(value);
             populatedCells += (value !== '');
         }

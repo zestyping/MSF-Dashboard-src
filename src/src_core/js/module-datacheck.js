@@ -704,9 +704,10 @@ epiwk: function(rec,key,none){
 				module_datacheck.errorlogging(!(is_empty),'empty',key,rec);
 				if(g.dev_defined.ignore_empty == false){error_temp = true;}		//if ignore_empty is true then don't add it 
 			} else {
-				if (key!=='disease' || !g.module_datacheck.diseasecheck) {  
-					var test_value = module_datacheck.testvalue[g.module_datacheck.definition_value[key].test_type](rec,key,g.module_datacheck.definition_value[key].setup);
-					module_datacheck.errorlogging(test_value,g.module_datacheck.definition_value[key].test_type,key,rec);
+                var spec = g.module_datacheck.definition_value[key];
+				if (spec && (key !== 'disease' || !g.module_datacheck.diseasecheck)) {  
+					var test_value = module_datacheck.testvalue[spec.test_type](rec, key, spec.setup);
+					module_datacheck.errorlogging(test_value, spec.test_type, key, rec);
 					
 					if (!test_value) {
 						error_temp = true;

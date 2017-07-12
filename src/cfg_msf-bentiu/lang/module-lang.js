@@ -273,6 +273,9 @@ g.module_lang.text.eng = {
 	loadfiles_selected: ['The file currently selected contains','records.'],
 	loadfiles_load: 'Load the Dashboard',
 
+	chart_date_title: 'Date',
+	chart_date_labelx: 'Date',
+	chart_date_labely: 'Cases',
 	chart_epiwk_title: 'Epidemiological Week',
 	chart_epiwk_labelx: 'Epi Week',
 	chart_epiwk_labely: 'Cases',

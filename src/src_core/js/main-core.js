@@ -201,7 +201,25 @@ function generateDashboard(){
 
                 var minDate = new Date(min.split('-')[0], min.split('-')[1] - 1, min.split('-')[2]);
                 var maxDate = new Date(max.split('-')[0], max.split('-')[1] - 1, max.split('-')[2]);
+                maxDate = d3.time.day.offset(maxDate, 2);
                 return [minDate, maxDate];
+            },
+            date_ordinal: function() {
+                // Generates an array of yyyy-mm-dd strings covering the range of dates in the data.
+                var min = d3.min(g.medical_data,function(rec){return rec[g.medical_headerlist['date']];});
+                var minParts = min.split('-');
+                var max = d3.max(g.medical_data,function(rec){return rec[g.medical_headerlist['date']];});
+                var maxParts = max.split('-');
+
+                var minDate = new Date(minParts[0], minParts[1] - 1, minParts[2]);
+                var maxDate = new Date(maxParts[0], maxParts[1] - 1, maxParts[2]);
+
+                var domain = [];
+                for (var date = minDate; date <= maxDate; date = d3.time.day.offset(date, 1)) {
+                    domain.push(date.toISOString().substr(0, 10));
+                }
+                console.log('date_ordinal domain:', domain);
+                return domain;
             },
             date_extent: function() {
                 var dateAccessor = function (rec){
@@ -911,7 +929,7 @@ function generateDashboard(){
                         if(filter){
                             if(filter instanceof Array){
                                 if(filter[0].length >= 2){
-                                    s = "[" + date1.toLocaleDateString() + " -> " + date2.toLocaleDateString() + "]";
+                                    s = "[" + filter[0][0].toLocaleDateString() + " -> " + filter[0][1].toLocaleDateString() + "]";
                                 }else if(filter[0].length >= 1){
                                     s = dc.utils.printSingleValue(filter[0]);
                                 }

@@ -165,6 +165,7 @@ g.module_getdata = {
  **/
 
 g.medical_headerlist = {
+    date: 'Date',       // Date
     epiwk: 'EpiWk',     // Epidemiological week: format YYYY-WW
     admN0: 'Chiefdom',  // Administrative division level for coarse boundaries
     admN1: 'Section',   // Administrative division level for map shading
@@ -233,12 +234,9 @@ if(!g.module_datacheck){
 }
 g.module_datacheck.definition_value = {
     epiwk: {test_type: 'epiwk', setup: 'none'},
-    admN0: {test_type: 'none', setup: 'none'},
     admN1: {test_type: 'ingeometry', setup: 'none'},
     age: {test_type: 'integer', setup: 'none'},
-    sex: {test_type: 'inlist', setup: ["M","F"]},
-    diagnosis: {test_type: 'none', setup: 'none'},
-    preg: {test_type: 'none', setup: 'none'},
+    sex: {test_type: 'inlist', setup: ['M', 'F']},
 };
 
 /**
@@ -369,6 +367,27 @@ g.viz_definition = {
                 
             },
 
+    date:  {    domain_builder: 'date_ordinal',
+                domain_parameter: 'custom_ordinal',
+
+                instance_builder: 'bar',
+
+                dimension_builder: 'auto',
+                dimension_parameter: {  column: 'date',
+                                        shared: false,
+                                        namespace: 'none'},
+
+                group_builder: 'auto',
+                group_parameter: {  column: ['none']},
+
+                display_axis:   {x:g.module_lang.text[g.module_lang.current].chart_date_labelx,
+                                 y:g.module_lang.text[g.module_lang.current].chart_date_labely},
+                display_colors: [4],            
+                display_intro: 'top',           
+                display_filter: true,
+                buttons_list: ['reset','help'],
+            },
+    /*
     epiwk: {    domain_builder: 'epiweek',
                 domain_parameter: 'custom_ordinal',   
 
@@ -390,6 +409,7 @@ g.viz_definition = {
                 buttons_list: ['reset','help'],
                 
             },
+    */
     age: {      domain_builder: 'integer_linear',
                 domain_parameter: 'custom_linear',   
 

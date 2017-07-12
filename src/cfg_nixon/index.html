@@ -20,6 +20,9 @@
             var prg_folder = '../src_core/';
         </script>
         <script src="../src_core/js/main-getlibs.js"></script>
+        <style>
+          div.buttons-right { position: absolute; right: 0; }
+        </style>
     </head>
     <body>
 
@@ -47,7 +50,7 @@
                 <div class="col-md-4">
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="buttons-diagnosis"></div>
+                            <div id="buttons-diagnosis" class="buttons-right"></div>
                             <div id="chart-diagnosis" class="viz">
                                 <p><span id="chart_diagnosis_title"></span> <span class="filter"> </span></p>
                             </div>
@@ -57,29 +60,17 @@
             </div>
             <div class="row">
                 <div class="col-md-8">
-                    <div id="buttons-date"></div>
+                    <div id="buttons-date" class="buttons-right"></div>
                     <div id="chart-date" class="viz">
                         <p><span id="chart_date_title"></span> <span class="filter"> </span></p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div id="buttons-dur"></div>
-                    <div id="chart-dur" class="viz">
-                        <p><span id="chart_dur_title"></span> <span class="filter"> </span></p>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-8">
-                    <div id="buttons-age"></div>
+                    <div id="buttons-age" class="buttons-right"></div>
                     <div id="chart-age" class="viz">
                         <p><span id="chart_age_title"></span> <span class="filter"> </span></p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div id="buttons-out"></div>
-                    <div id="chart-out" class="viz">
-                        <p><span id="chart_out_title"></span>  <span class="filter"> </span></p>
                     </div>
                 </div>
             </div>

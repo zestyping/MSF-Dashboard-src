@@ -169,18 +169,23 @@ module_interface.display = function(){
             switch(button){
                 case 'reset': 
                     var icon = '↻';
+                    icon = 'Reset filter';
                     break;
                 case 'help':
                     var icon = '?';  
+                    icon = 'Help';
                     break;
                 case 'parameters':
                     var icon = '⚙';
+                    icon = 'Settings';
                     break;
                 case 'lockcolor':
                     var icon = '⬙';
+                    icon = 'Lock colours';
                     break;
                 case 'expand':
                     var icon = '◰';
+                    icon = 'Expand';
                     break;
                 case 'toimage': // to be implemented
                     var icon = 'I';

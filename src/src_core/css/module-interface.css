@@ -36,11 +36,8 @@
     border-color:#ee0000;
     color:#ee0000;
     font-size:0.8em;
-    position: absolute;
     z-index: 999;
-    width: 2em;
-    font-weight: bold;
-    font-family: "dejavu";
+    margin-left: 6px;
 }
 .button:active{
     background-color:#ee0000!important;
@@ -53,23 +50,23 @@
     color:white;
 }
 .help{
-    right: 15px;
+    float: right;
     top: 0px;
 }
 .reset{
-    right: 45px;
+    float: right;
     top: 0px;
 }
 .expand{
-    right: 75px;
+    float: right;
     top: 0px;
 }
 .parameters{
-    right: 105px;
+    float: right;
     top: 0px;
 }
 .lockcolor{
-    right: 135px;
+    float: right;
     top: 0px;
 }
 #gobacktodashboard{

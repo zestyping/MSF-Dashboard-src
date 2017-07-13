@@ -440,60 +440,35 @@ module_getdata.load_medical_xls = function() {
     /* Call XLSX */
     var workbook = XLSX.read(data, {type:"binary"});
     var input = workbook.Sheets['input'];
+    var lastCell = input['!ref'].split(':')[1];
+    var lastCol = lastCell.replace(/\d+/, '');
+    var lastRow = lastCell.replace(/\D+/, '');
 
     /* Get header row */
-    var normalize = function(name) {
-        // When matching header names, ignore capitalization, spaces,
-        // and parenthesized parts.
-        return (name || '').replace(
-            /\(.*?\)/g, ' ').replace(/ +/g, ' ').trim().toLowerCase();
-    };
-
-    var fix_date = function(value) {
-        if (typeof value === 'number') {
-            var excel_epoch = new Date(1899, 11, 30); // Dec 30, 1899
-            var date = new Date(excel_epoch.getTime() + (value * 86400 * 1000));
-            return date.toISOString().substr(0, 10);
-        }
-        if (typeof value === 'string') {  // sadly, assume d/m/y
-            var parts = value.split(/[.-/]/);
-            if (parts.length === 3) {
-                if (parts[2].length < 3) parts[2] = '20' + parts[2];
-                // JS counts months from 0 to 11, but days from 1 to 31.
-                var date = new Date(parts[2], parts[1] - 1, parts[0]);
-                return date.toISOString().substr(0, 10);
-            }
-        }
-        return value;
-    };
-
     var colIndexes = {};
-    for (var c = 1; c <= 20; c++) {
+    var colFixers = {};
+    for (var c = 1; c <= lettersToNumbers(lastCol); c++) {
         var header = (input[numbersToLetters(c) + '1'] || {}).v;
         for (var key in g.medical_headerlist) {
             if (normalize(header) == normalize(g.medical_headerlist[key])) {
-                colIndexes[key] = c - 1;
+                colIndexes[key] = c - 1;  // dataRow is indexed from 0
+                colFixers[c] = (g.medical_data_fixers || {})[key];
             }
         }
     }
     console.log('column headers found in ' + name + ':', colIndexes);
 
     /* Get data rows */
-    var lastCell = input['!ref'].split(':')[1];
-    var lastCol = lastCell.replace(/\d+/, '');
-    var lastRow = lastCell.replace(/\D+/, '');
-
     for (var r = 2; r <= lastRow; r++) {
         var dataRow = [];
         var populatedCells = 0;
 
         for (var c = 1; c <= lettersToNumbers(lastCol); c++) {
             var value = (input[numbersToLetters(c) + r] || {}).v || '';
-            if (colIndexes['date'] === dataRow.length) {
-                value = fix_date(value);
-            }
-            dataRow.push(value);
             populatedCells += (value !== '');
+
+            var fixer = colFixers[c];
+            dataRow.push(fixer ? fixer(value) : value);
         }
 
         if (populatedCells > 0) {
@@ -501,10 +476,16 @@ module_getdata.load_medical_xls = function() {
             for (var key in g.medical_headerlist) {
                 record[g.medical_headerlist[key]] = dataRow[colIndexes[key]];
             }
+            console.log('record ' + medical_data.length + ':', record);
             medical_data.push(record);
         }
     };
     console.log('records loaded from ' + name + ':', medical_data.length);
+
+    g.medical_data = medical_data;
+    module_getdata.afterload_medical_d3(medical_data);
+
+    /* Helper functions */
 
     function numbersToLetters(num) {
         for (var ret = '', a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
@@ -521,8 +502,13 @@ module_getdata.load_medical_xls = function() {
         }
         return sum;
     }
-    g.medical_data = medical_data;
-    module_getdata.afterload_medical_d3(medical_data);
+
+    function normalize(name) {
+        // When matching header names, ignore capitalization, spaces,
+        // and parenthesized parts.
+        return (name || '').replace(
+            /\(.*?\)/g, ' ').replace(/ +/g, ' ').trim().toLowerCase();
+    }
 };
 
 // d3.js (local file)

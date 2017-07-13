@@ -166,14 +166,39 @@ g.module_getdata = {
 
 g.medical_headerlist = {
     date: 'Date',       // Date
+    name: 'Patient Name',
     id: 'OP No',        // Outpatient ID number
-    epiwk: 'EpiWk',     // Epidemiological week: format YYYY-WW
+//  epiwk: 'EpiWk',     // Epidemiological week: format YYYY-WW
     admN0: 'Chiefdom',  // Administrative division level for coarse boundaries
     admN1: 'Section',   // Administrative division level for map shading
     age: 'Age',         // Age of patient in years
     sex: 'Sex',         // Sex (M or F)
     diagnosis: 'Diagnosis',
-    preg: 'Pregnant',   // Pregnancy: 1 = Pregnant, 2 = Not Pregnant or N/A
+//  preg: 'Pregnant',   // Pregnancy
+};
+
+// Functions applied to the values in each field of the incoming data.
+g.medical_data_fixers = {
+    age: function (value) {
+        return (typeof value === 'number') ? value : -1;
+    },
+    date: function (value) {
+        if (typeof value === 'number') {
+            var excel_epoch = new Date(1899, 11, 30); // Dec 30, 1899
+            var date = new Date(excel_epoch.getTime() + (value * 86400 * 1000));
+            return date.toISOString().substr(0, 10);
+        }
+        if (typeof value === 'string') {  // sadly, assume d/m/y
+            var parts = value.split(/[.-/]/);
+            if (parts.length === 3) {
+                if (parts[2].length < 3) parts[2] = '20' + parts[2];
+                // JS counts months from 0 to 11, but days from 1 to 31.
+                var date = new Date(parts[2], parts[1] - 1, parts[0]);
+                return date.toISOString().substr(0, 10);
+            }
+        }
+        return value;
+    }
 };
 
 /**

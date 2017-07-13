@@ -181,7 +181,7 @@ epiwk: function(rec,key,none){
 	module_datacheck.testvalue = {
 		integer: function(rec,key,none){
 			var value = rec[g.medical_headerlist[key]];
-			var cond_1 = value >= 0;
+			var cond_1 = true; //value >= 0;
 			var cond_2 = parseInt(Number(value),10) == value;
 			return cond_1 && cond_2;
 		},

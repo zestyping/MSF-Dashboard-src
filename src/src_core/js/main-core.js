@@ -201,7 +201,8 @@ function generateDashboard(){
 
                 var minDate = new Date(min.split('-')[0], min.split('-')[1] - 1, min.split('-')[2]);
                 var maxDate = new Date(max.split('-')[0], max.split('-')[1] - 1, max.split('-')[2]);
-                maxDate = d3.time.day.offset(maxDate, 2);
+                minDate = d3.time.day.offset(minDate, -1);
+                maxDate = d3.time.day.offset(maxDate, 1);
                 return [minDate, maxDate];
             },
             date_ordinal: function() {

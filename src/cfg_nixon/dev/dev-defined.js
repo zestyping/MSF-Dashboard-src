@@ -391,12 +391,12 @@ g.viz_definition = {
                 buttons_list: ['help','reset','expand']
             },
 
-    date:  {    domain_builder: 'date_ordinal',
-                domain_parameter: 'custom_ordinal',
+    date:  {    domain_builder: 'date',
+                domain_parameter: 'custom_date',
 
                 instance_builder: 'bar',
 
-                dimension_builder: 'auto',
+                dimension_builder: 'date',
                 dimension_parameter: {  column: 'date',
                                         shared: false,
                                         namespace: 'none'},

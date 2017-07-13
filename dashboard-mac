@@ -1,0 +1,37 @@
+#!/bin/bash -eu
+
+cd $(dirname "$0")
+program=$(pwd)
+nwjs=
+
+if which nwjs; then
+    nwjs=nwjs
+else
+    while [[ ! -f $nwjs && $(pwd) != / ]]; do
+        for nwjs in "$(pwd)"/*/nwjs.app/Contents/MacOS/nwjs; do
+            if [[ -f $nwjs ]]; then break; fi
+        done
+        if [[ -f $nwjs ]]; then break; fi
+
+        for zip in nwjs{-*,}-{osx,mac}*.zip; do
+            if [[ -f $zip ]]; then unzip "$zip"; fi
+            for nwjs in "$(pwd)"/*/nwjs.app/Contents/MacOS/nwjs; do
+                if [[ -f $nwjs ]]; then break; fi
+            done
+            if [[ -f $nwjs ]]; then break; fi
+        done
+        if [[ -f $nwjs ]]; then break; fi
+
+        cd ..
+    done
+    cd "$program"
+fi
+
+if [[ -x $nwjs ]]; then
+    "$nwjs" "$program"
+else
+    echo "Sorry, can't find nwjs."
+    exit 1
+fi
+
+

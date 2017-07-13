@@ -857,6 +857,7 @@ function generateDashboard(){
          * @todo <code>stackedbar</code>: u5 and o5 labels are hardcoded.
          */
         var chartBuilder = function(){};
+        var chart = g.viz_definition[key1].chart;
         
         switch(g.viz_definition[key1].instance_builder){
             
@@ -908,7 +909,8 @@ function generateDashboard(){
                         if(filter){
                             if(filter instanceof Array){
                                 if(filter[0].length >= 2){
-                                    s = "[" + dc.utils.printSingleValue(Math.ceil(filter[0][0])) + " -> " + dc.utils.printSingleValue(Math.floor(filter[0][1])) + "]";
+                                    s = dc.utils.printSingleValue(Math.ceil(filter[0][0])) + ' to ' + dc.utils.printSingleValue(Math.floor(filter[0][1]));
+                                    if (key1 === 'age') s += ' years';
                                 }else if(filter[0].length >= 1){
                                     s = dc.utils.printSingleValue(filter[0]);
                                 }
@@ -924,13 +926,15 @@ function generateDashboard(){
                         .x(xScaleRange)
                         .filterPrinter(filterPrinterCustom);
                 } else if (g.viz_definition[key1].domain_parameter == 'custom_date'){
+                    console.log('custom_date domain');
                     // Range filtering displays dates
                     function filterPrinterCustom(filter){
                         var s = "";
                         if(filter){
                             if(filter instanceof Array){
                                 if(filter[0].length >= 2){
-                                    s = "[" + filter[0][0].toLocaleDateString() + " -> " + filter[0][1].toLocaleDateString() + "]";
+                                    var format = d3.time.format('%d %b %Y');
+                                    s = format(filter[0][0]) + ' to ' + format(filter[0][1]);
                                 }else if(filter[0].length >= 1){
                                     s = dc.utils.printSingleValue(filter[0]);
                                 }
@@ -1748,7 +1752,7 @@ function generateDashboard(){
                         if (filter) {
                             if (filter instanceof Array) {
                                 if (filter[0].length >= 2) {
-                                    s = "[" + dc.utils.printSingleValue(Math.ceil(filter[0][0])) + " -> " + dc.utils.printSingleValue(Math.floor(filter[0][1])) + "]";
+                                    s = dc.utils.printSingleValue(Math.ceil(filter[0][0])) + ' to ' + dc.utils.printSingleValue(Math.floor(filter[0][1]));
                                 } else if (filter[0].length >= 1) {
                                     s = dc.utils.printSingleValue(filter[0]);
                                 }

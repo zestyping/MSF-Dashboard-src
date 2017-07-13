@@ -293,6 +293,9 @@ g.module_datacheck.definition_record = [
 
 // 3) Chart parameters
 //------------------------------------------------------------------------------------
+
+dc.dateFormat = d3.time.format('%d/%m/%Y');
+
 /**
  Lists the charts and maps to be produced by {@link module:main-core} as well as defines their main characteristics.<br>
  Each element in the object contains the following sub-elements:

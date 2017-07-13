@@ -388,8 +388,7 @@ g.viz_definition = {
                 display_colors: [0,1,2,3,4,5],  
                 display_intro: 'bottom',
                 display_filter: true,
-                buttons_list: ['reset','help','expand','lockcolor','parameters'],
-                
+                buttons_list: ['help','reset','expand']
             },
 
     date:  {    domain_builder: 'date_ordinal',
@@ -410,7 +409,7 @@ g.viz_definition = {
                 display_colors: [4],            
                 display_intro: 'top',           
                 display_filter: true,
-                buttons_list: ['reset','help'],
+                buttons_list: ['help', 'reset'],
             },
     /*
     epiwk: {    domain_builder: 'epiweek',
@@ -453,7 +452,7 @@ g.viz_definition = {
                 display_colors: [4],            
                 display_intro: 'top',           
                 display_filter: true,
-                buttons_list: ['reset','help'],
+                buttons_list: ['help','reset'],
                 
             },
 

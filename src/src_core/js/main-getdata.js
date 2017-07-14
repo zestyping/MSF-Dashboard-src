@@ -231,6 +231,7 @@ module_getdata.process_geometry = function(){
      * @alias module:g.geometry_keylist
      */
     g.geometry_keylist = Object.keys(g.module_getdata.geometry);
+    console.log('geometry_keylist', g.geometry_keylist);
     /**
      * Stores a number associate with administrative level (0 is the wider, and the bigger is the lowest/smaller).
          <br>

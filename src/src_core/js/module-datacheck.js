@@ -547,8 +547,9 @@ epiwk: function(rec,key,none){
 
 		} else {
 			g.geometry_keylist.forEach(function(key,keynum) {		//create single geometry name in format 'admN1, admN2' etc
+                var check_def = g.module_datacheck.definition_value[key] || {};
                 var value = rec[g.medical_headerlist[key]] || '';
-				if(g.module_datacheck.definition_value[key].setup == 'normalize'){		
+				if(check_def.setup == 'normalize') {
 					temp_loc += ', ' + toTitleCase(value.trim().split('_').join(' '));
 				}else{
 					temp_loc += ', ' + value.trim().split('_').join(' ');
@@ -621,8 +622,10 @@ epiwk: function(rec,key,none){
 				for (var i = g.geometry_keylist.length - 2; i >= 0; i--) {  //move through all parent layers to sum up completeness
 				 	var temp_loc = '';
 					for (var j = 0; j <= i; j++) {						//get name, e.g. j=0,1 then j=0
-                        var value = rec[g.medical_headerlist[g.geometry_keylist[j]]] || '';
-						if(g.module_datacheck.definition_value[g.geometry_keylist[j]].setup == 'normalize'){		
+                        var geom_key = g.geometry_keylist[j];
+                        var check_def = g.module_datacheck.definition_value[geom_key] || {};
+                        var value = rec[g.medical_headerlist[geom_key]] || '';
+						if(check_def.setup == 'normalize'){
 							temp_loc += ', ' + toTitleCase(value.trim().split('_').join(' '));
 						}else{
 							temp_loc += ', ' + value.trim().split('_').join(' ');

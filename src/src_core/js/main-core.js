@@ -431,14 +431,15 @@ function generateDashboard(){
                         } else {
 
                             var count = key2num;
-                            if(g.module_datacheck.definition_value[key2].setup == 'normalize'){      
+                            var check_def = g.module_datacheck.definition_value[key2] || {};
+                            if(check_def.setup == 'normalize'){      
                                 var loc_current = toTitleCase(rec[g.medical_headerlist[key2list[count]]].trim().split('_').join(' '));
                             }else{
                                 var loc_current = rec[g.medical_headerlist[key2list[count]]].trim().split('_').join(' ');
                             }
                             while(count > 0){
                                 count--;
-                                if(g.module_datacheck.definition_value[key2].setup == 'normalize'){      
+                                if(check_def.setup == 'normalize'){      
                                     loc_current = toTitleCase(rec[g.medical_headerlist[key2list[count]]].trim().split('_').join(' '))+', '+loc_current;
                                 }else{
                                     loc_current = rec[g.medical_headerlist[key2list[count]]].trim().split('_').join(' ')+', '+loc_current;

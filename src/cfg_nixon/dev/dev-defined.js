@@ -115,13 +115,11 @@ g.module_colorscale.mapunitlist = ['Cases','Deaths','IncidenceProp','MortalityPr
  */
 g.module_getdata = {
     geometry: {
-        /*
-        admN1: {
+        admN0: {
             method:  'geometryd3',
             options: {  url: './data/admin3.json',
                         type: 'json'}
             },
-        */
         admN1: {
             method:  'geometryd3',
             options: {  url: './data/nixon4.json',
@@ -259,7 +257,6 @@ if(!g.module_datacheck){
     g.module_datacheck = {}; 
 }
 g.module_datacheck.definition_value = {
-    epiwk: {test_type: 'epiwk', setup: 'none'},
     admN1: {test_type: 'ingeometry', setup: 'none'},
     age: {test_type: 'integer', setup: 'none'},
     sex: {test_type: 'inlist', setup: ['M', 'F']},
@@ -386,7 +383,7 @@ g.viz_definition = {
                                         namespace: 'none'},
 
                 group_builder: 'multiadm',
-                group_parameter: {  column: [{key:'out',value:'2'}]},
+                group_parameter: {  column: [{key:'none',value:'none'}]},
 
                 display_colors: [0,1,2,3,4,5],  
                 display_intro: 'bottom',

@@ -139,7 +139,8 @@ module_multiadm.display = function(){
 			html +=  '<div id="map-'+key+'-tab" class="'+tab_status+' tab">';
 			
 			// Tab title
-			html +=  '<div class="col-md-7 tab-content">'+g.module_lang.text[g.module_lang.current]['map_'+key].title+'</div>';
+                        var strings = g.module_lang.text[g.module_lang.current]['map_' + key] || {};
+			html +=  '<div class="col-md-7 tab-content">'+strings.title+'</div>';
 			
 			// 'jumpto' dropdown list
 			html +=  '<div class="col-md-5 tab-content" id="map-'+key+'-jumpto"></div>';

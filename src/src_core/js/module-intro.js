@@ -177,6 +177,9 @@ module_intro.setup = function() {
     	});
     };
     
+    // TODO(ping)
+    steps.length = 5;
+
 	g.module_intro.definition.setOptions({
 			steps: steps 
 		});

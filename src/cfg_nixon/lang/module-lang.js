@@ -400,7 +400,7 @@ g.module_lang.text.eng = {
 	datatable_legend: 'Sex : 1 = Male, 2 = Female | Pregnancy : 1 = Yes, 2 = No | Dehydration : A = Light, B = Moderate, C = Severe | Outcome : 1 = Cured, 2 = Death, 3 = Interrupted follow-up, 4 = Transfered',
 	interface_menutitle: 'MENU',
 	interface_menuepiwk: 'Quickly filter the \'n\' last weeks',
-	interface_menureset: 'Reset All',
+	interface_menureset: 'Reset all filters',
 	interface_menureload: 'Reload',
 	interface_menuhelp: 'Help',
 	interface_menuautoplay: {
@@ -411,13 +411,24 @@ g.module_lang.text.eng = {
 	
 	interface_colorscale: 'Go back to the Dashboard',
 
-	intro_intro: '<p>Elements are the features of the dashboard you can click. You will notice you can interact with different elements by selecting and deselecting.The following are the typical ways in which you can interact with the dashboard elements:</p><p><b>1) Filtering by elements.</b><br>This affects all the other graphs, maps and table.</p><p><b>2) Selecting multiple elements.</b><br>This allows you to combine filters eg. by area on the map and gender.</p><p><b>3) Deselecting elements and remove filters.</b><br>Elements can be unfiltered one by one or by using the "R" button to clear filters applying to one chart. Alternatively, click "Reset All" on the left handside to remove all filters.</p><p><b>4) Hovering over elements to display values.</b></p><p>Hover the mouse over individual elements to view specific values.</p><p>Click "Next" or press the right arrow to view the details of each graph.</p>',
+	intro_intro: '<p>Elements are the features of the dashboard you can click. You will notice you can interact with different elements by selecting and deselecting.The following are the typical ways in which you can interact with the dashboard elements:</p><p><b>1) Filtering by elements.</b><br>This affects all the other graphs, maps and table.</p><p><b>2) Selecting multiple elements.</b><br>This allows you to combine filters eg. by area on the map and gender.</p><p><b>3) Deselecting elements and remove filters.</b><br>Elements can be unfiltered one by one or by using the "Reset filter" button to clear filters applying to one chart. Alternatively, click the "Reset all filters" button on the left side to remove all filters.</p><p><b>4) Hovering over elements to display values.</b><br>Hover the mouse over individual elements to view specific values.</p><p>Click "Next" or press the right-arrow key to learn more about each graph.</p>',
 
-	intro_multiadm: 'This choropleth map displays number of cases or incidence rates (according to the option you selected on the dataload screen) at the chosen administrative level (Commune - Adm7, Quartier - Adm8 or Cellule - Adm9).<br><i>Click the map to filter data by area. You can select multiple areas. To unfilter areas, click selected areas one by one, or click the "R" button to reset.<br>Click the tabs to navigate between administrative levels. If you swich to a higher administrative level (eg. Cellules to Communes), your filters applying to the lower administrative levels will be reset (in this case, both filters applying to Cellules and Quartiers will be reset).<br>You can zoom directly to specific areas using the "Goto.." drop-down menus. First, select the Commune, then the Quartier and, finally, the Cellule.<br>You can also navigate the map using the zoom buttons and your mouse.</i>',
+	intro_multiadm:
+        '<p>This map displays the number of cases in each section. ' +
+        '<p>Click the map to filter data by area. You can select multiple areas. To remove the filter, click the "Reset filter" button above the map. ' +
+        '<p>You can zoom directly to specific areas using the "Goto..." drop-down menu.',
 	
 	intro_epiwk: 'This bar chart displays case numbers by epi-week.<br><i>Click on the bars to filter by a specific epi-week. You can select multiple epi-weeks. To reset, click again on the selected epi-weeks (one by one) or click the "R" button.</i>',
 
-	intro_age: 'This bar chart displays case numbers by age.<br><i>Click and drag to filter by an age range. To reset, click on the bar chart outside of the selected range or click the "R" button.</i>',
+	intro_age: '<p>This bar chart displays case numbers by age.' +
+        '<p>Click and drag to filter by an age range. To remove the filter, click the "Reset filter" button above the chart.',
+
+	intro_date: '<p>This bar chart displays case numbers by date.' +
+        '<p>Click and drag to filter by a date range. To remove the filter, click the "Reset filter" button above the chart.',
+
+	intro_diagnosis: '<p>This bar chart displays case numbers by diagnosis.' +
+        '<p>Click any bar to filter by a specific diagnosis. To remove the filter, click the "Reset filter" button above the chart.' +
+        '<p>By default, a partial set of the diagnoses is shown.  To see all the diagnoses, click the "Show all diagnoses" checkbox.',
 
 	intro_sexpreg: 'This pie chart displays case numbers by sex and for women, by pregnancy.<br><i>Click on the pie slices to filter by a specific sex / pregnancy "status". To reset, click the selected pie slices or click the "R" button.</i>',
 

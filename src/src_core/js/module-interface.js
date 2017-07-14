@@ -502,6 +502,7 @@ module_interface.display = function(){
             html += '<button id="menu_help" class="menu_button btn btn-primary btn-sm">'+g.module_lang.text[g.module_lang.current].interface_menuhelp+'</button>';
 
             // Quick access to epiweeks button - only if no range_chart 
+            /*
             var range_chart_displayed = false;
             g.viz_keylist.forEach(function(key1) {
                 if (g.viz_definition[key1].range_chart) {range_chart_displayed=true;}
@@ -516,6 +517,7 @@ module_interface.display = function(){
 
             // Autoplay button
             html += '<button id="menu_autoplay" class="menu_button btn btn-primary btn-sm">'+g.module_lang.text[g.module_lang.current].interface_menuautoplay.play+'</button>'
+            */
 
             // Record count
             if(g.medical_datatype == 'outbreak'){

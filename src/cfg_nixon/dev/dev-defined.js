@@ -449,7 +449,7 @@ g.viz_definition = {
             y: localized_strings.chart_diagnosis_labely
         },
         display_colors: [4],
-        display_intro: 'top',
+        display_intro: 'bottom',
         display_filter: true,
         domain_builder: 'none',
         domain_parameter: 'none',
@@ -533,3 +533,4 @@ g.viz_timeline = 'date';
  * @alias module:g.viz_timeshare
  */
 g.viz_timeshare = [];
+

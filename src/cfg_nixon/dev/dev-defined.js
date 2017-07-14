@@ -450,7 +450,7 @@ g.viz_definition = {
             return Object.keys(
                 g.medical_data.extras.diagnosis_chart_values || {});
         },
-        domain_parameter: 'custom_categorical',
+        domain_parameter: 'custom_ordinal',
         group_builder: 'auto',
         group_parameter: {column: ['none']},
         instance_builder: 'row',

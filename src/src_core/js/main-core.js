@@ -1652,30 +1652,10 @@ function generateDashboard(){
 
                 chart.margins({top: 10, right: 3, bottom: 50, left: 3});
 
-                if (def.domain_parameter == 'custom_categorical') {
-                    // Show only items in the domain, in the domain's order.
-                    chart.data(function(group) {
-                        var pairs = group.all();
-                        var valueMap = {};
-                        for (var i = 0; i < pairs.length; i++) {
-                            valueMap[pairs[i].key] = pairs[i].value;
-                        }
-                        var domainPairs = [];
-                        for (var i = 0; i < def.domain.length; i++) {
-                            domainPairs.push({
-                                key: def.domain[i],
-                                value: valueMap[def.domain[i]] || 0
-                            });
-                        }
-                        return domainPairs;
-                    });
-                } else if (def.domain_parameter == 'custom_ordinal') {
-                    // Show only items in the domain, sorted by value.
-                    chart.data(function(group) {
-                        return group.top(Infinity).filter(function(d) {
-                            return def.domain.indexOf(d.key) >= 0;
-                        })
-                    });
+                if (def.domain_parameter == 'custom_ordinal') {
+                    setChartDomainToFixedList(chart, def.domain);
+                } else if (def.domain_parameter == 'custom_ordinal_sorted') {
+                    setChartDomainToSortedList(chart, def.domain);
                 } else {
                     // Show only nonzero-valued bars.
                     chart.data(function(group) {
@@ -2558,3 +2538,34 @@ function remove(array, element) {
         array.splice(index, 1);
     }
 }
+
+/** Show only items in the domain, in the domain's order. */
+function setChartDomainToFixedList(chart, domain) {
+    chart.data(function(group) {
+        var pairs = group.all();
+        var valueMap = {};
+        for (var i = 0; i < pairs.length; i++) {
+            valueMap[pairs[i].key] = pairs[i].value;
+        }
+        var domainPairs = [];
+        for (var i = 0; i < domain.length; i++) {
+            domainPairs.push({
+                key: domain[i],
+                value: valueMap[domain[i]] || 0
+            });
+        }
+        return domainPairs;
+    });
+}
+
+
+/** Show only items in the domain, sorted by value. */
+function setChartDomainToSortedList(chart, domain) {
+    chart.data(function(group) {
+        return group.top(Infinity).filter(function(d) {
+            return domain.indexOf(d.key) >= 0;
+        })
+    });
+}
+
+

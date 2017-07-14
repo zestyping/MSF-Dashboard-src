@@ -440,9 +440,9 @@ module_getdata.load_medical_xls = function(options) {
     /* Call XLSX */
     var workbook = XLSX.read(data, {type: 'binary'});
     var input = workbook.Sheets['input'];
+    var lastCell = XLSX.utils.decode_range(input['!ref']).e; // .e for "end"
     var toAddr = XLSX.utils.encode_cell;
     var fromAddr = XLSX.utils.decode_cell;
-    var lastCell = fromAddr(input['!ref'].split(':')[1]);
 
     /* Get header row */
     var colIndexes = {};
@@ -481,20 +481,32 @@ module_getdata.load_medical_xls = function(options) {
     };
     console.log('records loaded from ' + name + ':', medical_data.length);
 
-    g.medical_data = medical_data;
-
     /* Get extra data */
-    var specs = options.extra_data || [];
+    var specs = (options || {}).extras || [];
+    var extras = {};
     for (var i = 0; i < specs.length; i++) {
-        module_getdata.read_extra_data_xls(workbook, specs[i]);
+        module_getdata.read_extra_from_workbook(extras, workbook, specs[i]);
     }
+    medical_data.extras = extras;
 
-    /* Continue with next file */
+    /* Save results and continue with next file */
+    g.medical_data = medical_data;
     module_getdata.afterload_medical_d3(medical_data);
 };
 
-module_getdata.read_extra_data_xls = function(workbook, spec) {
+module_getdata.read_extra_from_workbook = function(extras, workbook, spec) {
     var sheet = workbook.Sheets[spec.sheet];
+    var result = {};
+    var keyAddrs = addrsInRange(spec.key_range);
+    var valueAddrs = addrsInRange(spec.value_range);
+    for (var i = 0; i < keyAddrs.length && i < valueAddrs.length; i++) {
+        var key = (sheet[keyAddrs[i]] || {}).v || '';
+        var value = (sheet[valueAddrs[i]] || {}).v || '';
+        if (key !== '' && value !== '') {
+            result[key] = value;
+        }
+    }
+    extras[spec.name] = result;
 };
 
 // d3.js (local file)
@@ -690,4 +702,17 @@ function normalize(name) {
     // and parenthesized parts.
     return (name || '').replace(
         /\(.*?\)/g, ' ').replace(/ +/g, ' ').trim().toLowerCase();
+}
+
+function addrsInRange(range) {
+    var range = XLSX.utils.decode_range(range);
+    var start = range.s;
+    var end = range.e;
+    var addrs = []
+    for (var r = start.r; r <= end.r; r++) {
+        for (var c = start.c; c <= end.c; c++) {
+            addrs.push(XLSX.utils.encode_cell({c: c, r: r}));
+        }
+    }
+    return addrs;
 }

@@ -135,7 +135,18 @@ g.module_getdata = {
     medical: {
         medical: {
             method: 'medicalxlsx',
-            options: {url: './input/', type: 'xlsx'}
+            options: {
+                url: './input/',
+                type: 'xlsx',
+                extras: [
+                    {
+                        name: 'diagnosis_chart_shown_values',
+                        sheet: 'diagnosis',
+                        key_range: 'A2:A1000',
+                        value_range: 'B2:B1000'
+                    }
+                ]
+            }
         }
     },
     population: {

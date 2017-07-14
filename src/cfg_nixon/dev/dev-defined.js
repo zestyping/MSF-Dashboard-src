@@ -447,7 +447,8 @@ g.viz_definition = {
         display_intro: 'top',
         display_filter: true,
         domain_builder: function() {
-            return Object.keys(g.medical_data.extras.diagnosis_chart_values || {});
+            return Object.keys(
+                g.medical_data.extras.diagnosis_chart_values || {});
         },
         domain_parameter: 'custom_categorical',
         group_builder: 'auto',
@@ -469,6 +470,17 @@ g.viz_definition = {
         group_builder: 'none',
         group_parameter: {column: 'none'},
     },
+};
+
+g.global_filter = {
+    accessor: function(rec) {
+        return rec[g.medical_headerlist.diagnosis];
+    },
+    predicate: function(value) {
+        var values = Object.keys(
+            g.medical_data.extras.diagnosis_chart_values || {});
+        return values.length ? values.indexOf(value) >= 0 : true;
+    }
 };
 
 /**

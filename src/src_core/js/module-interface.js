@@ -760,7 +760,13 @@ module_interface.menu_reset = function() {
     }else{
         $('#select-'+g.geometry_keylist[0]).val('NA').change();
     }
-    dc.filterAll();
+
+    // Reset all chart filters (but not the global filter if any)
+    for (var key in g.viz_definition) {
+        var chart = g.viz_definition[key].chart;
+        if (chart) chart.filterAll();
+    }
+
     g.module_colorscale.modecurrent = temp_mode;
     if (g.medical_datatype == 'surveillance' && temp_disease && g.module_colorscale.mapunitcurrent !== 'Completeness') {
         g.viz_definition.disease.chart.filter(temp_disease);

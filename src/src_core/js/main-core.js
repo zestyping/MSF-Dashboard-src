@@ -577,6 +577,10 @@ function generateDashboard(){
         }
         main_core.get_dimension(g.viz_definition[key1].dimension_builder, g.viz_definition[key1].dimension_parameter);
 
+        if (g.global_filter) {
+            g.global_filter.dimension = cf.dimension(g.global_filter.accessor);
+            g.global_filter.dimension.filter(g.global_filter.predicate);
+        }
 
         //------------------------------------------------------------------------------------
         // Group: Charts groups setup
@@ -2522,7 +2526,7 @@ function generateDashboard(){
     // Initiate
     module_colorscale.lockcolor(g.module_colorscale.modecurrent);
 
-    // Reset all filters
+    // Reset all chart filters (but not the global filter if any)
     for (var key in g.viz_definition) {
         var chart = g.viz_definition[key].chart;
         if (chart) chart.filterAll();

@@ -893,13 +893,9 @@ module_datacheck.display = function(){
 
     var n = g.medical_data.length;
     html += `<span class="record-count">${n} record${plural(n)}</span>`;
-    html += ` found in the selected file${plural(g.medical_filelist.length)}.`;
+    html += ` are found in the selected file${plural(g.medical_files.length)}.`;
 
 	// Content
-	html += '<table style="font-size:13px;">';
-	html += '<tr><th>'+g.module_lang.text[g.module_lang.current].datacheck_header+'</th><th>&nbsp;#'+g.module_lang.text[g.module_lang.current].datacheck_error+'</th><th>&nbsp;(%'+g.module_lang.text[g.module_lang.current].datacheck_error+')</th><th>&nbsp;#'+g.module_lang.text[g.module_lang.current].datacheck_empty+'</th><th>&nbsp;(%'+g.module_lang.text[g.module_lang.current].datacheck_empty+')</th></tr>'
-
-
 	var all_shared = [];
 	if (g.new_layout) {
 		var shared_attr_lists = module_datacheck.getSharedAttributes();
@@ -908,31 +904,53 @@ module_datacheck.display = function(){
 		};
 	};
 
-	function createRow(temp_name, opt){
-		var temp_data = {};
-		temp_data.error = g.module_datacheck.sum.error[temp_name];
-		temp_data.empty = g.module_datacheck.sum.empty[temp_name];
-		var temp_value = {};
-		temp_value.error = Math.round((temp_data.error / g.medical_data.length)*100);
-		temp_value.empty = Math.round((temp_data.empty / g.medical_data.length)*100);
-
-		return '<tr><td>'+ g.medical_headerlist[temp_name] + opt +':&nbsp;</td><td>&nbsp;' + temp_data.error + '</td><td>&nbsp;(or ' + temp_value.error + '%)</td>&nbsp;</td><td>&nbsp;' + temp_data.empty + '</td><td>&nbsp;(or ' + temp_value.empty + '%)</td></tr>'; 
-	}
-
-	
-
+    var messages = [];
 	Object.keys(g.medical_headerlist).forEach(function(key){
-		var opt = '';
-		if (all_shared.indexOf(key)!=-1) {
-			opt = ' (' + key + ')';
+		var name = g.medical_headerlist[key];
+		if (all_shared.indexOf(key) != -1) {
+			name += ' (' + key + ')';
 		}
 		
-		html += createRow(key, opt);
-	})
+		var error_count = g.module_datacheck.sum.error[key];
+		var empty_count = g.module_datacheck.sum.empty[key];
+		var error_pct = Math.round((error_count / g.medical_data.length)*100);
+		var empty_pct = Math.round((empty_count / g.medical_data.length)*100);
 
-	html += '</table>';
+        if (error_count) {
+            messages.push(
+                `<span class="error-count">` +
+                `${error_count} record${plural(error_count)}</span> ` +
+                `${plural(error_count, 'have', 'has')} an invalid ` +
+                `<span class="error-field">${name}</span>.`
+            );
+        }
 
-	html += '<div id="datalog" class="col-md-7">';
-	html += '</div>';
+        if (empty_count) {
+            messages.push(
+                `<span class="empty-count">` +
+                `${empty_count} record${plural(empty_count)}</span> ` +
+                `${plural(empty_count, 'have', 'has')} a missing ` +
+                `<span class="empty-field">${name}</span>.`
+            );
+        }
+
+	});
+
+    if (messages.length) {
+        html += '<ul>';
+        messages.forEach(function(message) {
+            html += '<li>' + message;
+        });
+        html += '</ul>';
+    }
+
+	//html += '<div id="datalog" class="col-md-7">';
+	//html += '</div>';
 	return html;
+}
+
+function plural(n, plural, singular) {
+    plural = plural || 's';
+    singular = singular || '';
+    return n === 1 ? singular : plural;
 }

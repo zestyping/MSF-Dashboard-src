@@ -332,6 +332,9 @@ g.module_lang.text.eng = {
 		Completeness: 'Frequency structures report, in %'
 	},
 	jumpto: 'Goto...',
+	map_admN0: {
+		title: 'Chiefdoms'
+	},
 	map_admN1: {
 		title: 'Sections'
 	},

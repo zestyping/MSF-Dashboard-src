@@ -115,11 +115,13 @@ g.module_colorscale.mapunitlist = ['Cases','Deaths','IncidenceProp','MortalityPr
  */
 g.module_getdata = {
     geometry: {
+        /*
         admN0: {
             method:  'geometryd3',
             options: {  url: './data/admin3.json',
                         type: 'json'}
             },
+        */
         admN1: {
             method:  'geometryd3',
             options: {  url: './data/nixon4.json',

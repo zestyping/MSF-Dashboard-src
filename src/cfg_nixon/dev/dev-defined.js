@@ -447,7 +447,7 @@ g.viz_definition = {
         display_intro: 'top',
         display_filter: true,
         domain_builder: function() {
-            return Object.keys(g.medical_data.extras.diagnosis_chart_values);
+            return Object.keys(g.medical_data.extras.diagnosis_chart_values || {});
         },
         domain_parameter: 'custom_categorical',
         group_builder: 'auto',

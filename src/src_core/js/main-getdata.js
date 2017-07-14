@@ -112,8 +112,8 @@ module_getdata.load_propagate = function(){
                 module_getdata.load_filed3(current_datasource.options.url,current_datasource.options.type,[name,current_dataname],module_getdata.afterload_population);
                 break;
             case 'medicalxlsx':
-                 $(load_status).html('Getting Local Medical files...');
-                module_getdata.load_medical_xlsfolders(current_datasource.options.url);
+                $(load_status).html('Getting Local Medical files...');
+                module_getdata.load_medical_xlsfolders(current_datasource.options.url, current_datasource.options);
                 break;
             default:
                 console.log('main-getdata.js ~l80: Your method to access  the source is not defined: ' + current_datasource.method);
@@ -369,7 +369,7 @@ module_getdata.process_population = function(){
     Data load options: Medical
 --------------------------------------------------------------------*/
 
-module_getdata.load_medical_xlsfolders = function(path) {
+module_getdata.load_medical_xlsfolders = function(path, options) {
 
     var fs = nw.require('fs');
 
@@ -424,11 +424,10 @@ module_getdata.load_medical_xlsfolders = function(path) {
      **/
     g.medical_filetypecurrent = g.medical_filecurrent.substr(g.medical_filecurrent.length - 3);
 
-    module_getdata.load_medical_xls();
-
+    module_getdata.load_medical_xls(options);
 }
 
-module_getdata.load_medical_xls = function() {
+module_getdata.load_medical_xls = function(options) {
     var X = XLSX;
     var name = '.' + g.medical_folder + g.medical_filecurrent;
 
@@ -439,20 +438,20 @@ module_getdata.load_medical_xls = function() {
     var data = fs.readFileSync(name, 'binary');
 
     /* Call XLSX */
-    var workbook = XLSX.read(data, {type:"binary"});
+    var workbook = XLSX.read(data, {type: 'binary'});
     var input = workbook.Sheets['input'];
-    var lastCell = input['!ref'].split(':')[1];
-    var lastCol = lastCell.replace(/\d+/, '');
-    var lastRow = lastCell.replace(/\D+/, '');
+    var toAddr = XLSX.utils.encode_cell;
+    var fromAddr = XLSX.utils.decode_cell;
+    var lastCell = fromAddr(input['!ref'].split(':')[1]);
 
     /* Get header row */
     var colIndexes = {};
     var colFixers = {};
-    for (var c = 1; c <= lettersToNumbers(lastCol); c++) {
-        var header = (input[numbersToLetters(c) + '1'] || {}).v;
+    for (var c = 0; c <= lastCell.c; c++) {
+        var header = (input[toAddr({c: c, r: 0})] || {}).v;
         for (var key in g.medical_headerlist) {
             if (normalize(header) == normalize(g.medical_headerlist[key])) {
-                colIndexes[key] = c - 1;  // dataRow is indexed from 0
+                colIndexes[key] = c;
                 colFixers[c] = (g.medical_data_fixers || {})[key];
             }
         }
@@ -460,14 +459,13 @@ module_getdata.load_medical_xls = function() {
     console.log('column headers found in ' + name + ':', colIndexes);
 
     /* Get data rows */
-    for (var r = 2; r <= lastRow; r++) {
+    for (var r = 1; r <= lastCell.r; r++) {
         var dataRow = [];
         var populatedCells = 0;
 
-        for (var c = 1; c <= lettersToNumbers(lastCol); c++) {
-            var value = (input[numbersToLetters(c) + r] || {}).v || '';
+        for (var c = 0; c <= lastCell.c; c++) {
+            var value = (input[toAddr({c: c, r: r})] || {}).v || '';
             populatedCells += (value !== '');
-
             var fixer = colFixers[c];
             dataRow.push(fixer ? fixer(value) : value);
         }
@@ -484,32 +482,19 @@ module_getdata.load_medical_xls = function() {
     console.log('records loaded from ' + name + ':', medical_data.length);
 
     g.medical_data = medical_data;
+
+    /* Get extra data */
+    var specs = options.extra_data || [];
+    for (var i = 0; i < specs.length; i++) {
+        module_getdata.read_extra_data_xls(workbook, specs[i]);
+    }
+
+    /* Continue with next file */
     module_getdata.afterload_medical_d3(medical_data);
+};
 
-    /* Helper functions */
-
-    function numbersToLetters(num) {
-        for (var ret = '', a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
-            ret = String.fromCharCode(parseInt((num % b) / a) + 65) + ret;
-        }
-        return ret;
-    }
-
-    function lettersToNumbers(string) {
-        string = string.toUpperCase();
-        var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', sum = 0, i;
-        for (i = 0; i < string.length; i++) {
-            sum += Math.pow(letters.length, i) * (letters.indexOf(string.substr(((i + 1) * -1), 1)) + 1);
-        }
-        return sum;
-    }
-
-    function normalize(name) {
-        // When matching header names, ignore capitalization, spaces,
-        // and parenthesized parts.
-        return (name || '').replace(
-            /\(.*?\)/g, ' ').replace(/ +/g, ' ').trim().toLowerCase();
-    }
+module_getdata.read_extra_data_xls = function(workbook, spec) {
+    var sheet = workbook.Sheets[spec.sheet];
 };
 
 // d3.js (local file)
@@ -698,4 +683,11 @@ module_getdata.load_initiate();
  */
 function toTitleCase(str){
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+
+function normalize(name) {
+    // When matching header names, ignore capitalization, spaces,
+    // and parenthesized parts.
+    return (name || '').replace(
+        /\(.*?\)/g, ' ').replace(/ +/g, ' ').trim().toLowerCase();
 }

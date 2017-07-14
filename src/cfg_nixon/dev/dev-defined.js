@@ -140,7 +140,7 @@ g.module_getdata = {
                 type: 'xlsx',
                 extras: [
                     {
-                        name: 'diagnosis_chart_shown_values',
+                        name: 'diagnosis_chart_values',
                         sheet: 'diagnosis',
                         key_range: 'A2:A1000',
                         value_range: 'B2:B1000'
@@ -230,8 +230,7 @@ function main_loadfiles_readvar(){
      * @alias module:g.medical_read
      * @todo Why is it in a function?
      */
-    g.medical_read = {
-    };
+    g.medical_read = {};
 }
 
 // 2) Data check parameters
@@ -433,25 +432,27 @@ g.viz_definition = {
         group_parameter: {column: ['none']},
     },
     diagnosis: {
-        domain_builder: 'custom_ordinal',
-        domain_parameter: 'none',
-        instance_builder: 'row',
+        buttons_list: ['help', 'reset'],
         dimension_builder: 'auto',
         dimension_parameter: {
             column: 'diagnosis',
             shared: false,
             namespace: 'none'
         },
-        group_builder: 'auto',
-        group_parameter: {column: 'none'},
-        display_axis: {
+        display_axis:{
             x: localized_strings.chart_diagnosis_labelx,
             y: localized_strings.chart_diagnosis_labely
         },
-        display_colors: [2],
-        display_intro_position: 'left',
+        display_colors: [4],
+        display_intro: 'top',
         display_filter: true,
-        buttons_list: ['help', 'reset']
+        domain_builder: function() {
+            return Object.keys(g.medical_data.extras.diagnosis_chart_values);
+        },
+        domain_parameter: 'custom_categorical',
+        group_builder: 'auto',
+        group_parameter: {column: ['none']},
+        instance_builder: 'row',
     },
     table: {
         buttons_list: ['help'],

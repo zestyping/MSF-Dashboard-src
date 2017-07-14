@@ -860,6 +860,7 @@ function generateDashboard(){
          * @todo <code>stackedbar</code>: u5 and o5 labels are hardcoded.
          */
         var chartBuilder = function(){};
+        var def = g.viz_definition[key1];
         var chart = g.viz_definition[key1].chart;
         
         switch(g.viz_definition[key1].instance_builder){
@@ -1645,14 +1646,41 @@ function generateDashboard(){
                         .xAxis().ticks(3);;
                 }
 
-                g.viz_definition[key1].chart
-                    .margins({top: 10, right: 3, bottom: 50, left: 3})
-                    .data(function(group) {
+                chart.margins({top: 10, right: 3, bottom: 50, left: 3});
+
+                if (def.domain_parameter == 'custom_categorical') {
+                    // Show only items in the domain, in the domain's order.
+                    chart.data(function(group) {
+                        var pairs = group.all();
+                        var valueMap = {};
+                        for (var i = 0; i < pairs.length; i++) {
+                            valueMap[pairs[i].key] = pairs[i].value;
+                        }
+                        var domainPairs = [];
+                        for (var i = 0; i < def.domain.length; i++) {
+                            domainPairs.push({
+                                key: def.domain[i],
+                                value: valueMap[def.domain[i]] || 0
+                            });
+                        }
+                        return domainPairs;
+                    });
+                } else if (def.domain_parameter == 'custom_ordinal') {
+                    // Show only items in the domain, sorted by value.
+                    chart.data(function(group) {
+                        return group.top(Infinity).filter(function(d) {
+                            return def.domain.indexOf(d.key) >= 0;
+                        })
+                    });
+                } else {
+                    // Show only nonzero-valued bars.
+                    chart.data(function(group) {
                         return group.top(Infinity).filter(function(d) {
                             return d.value != 0;
                         });
                     });
-                
+                }
+
                 // Filter one by one
                 g.viz_definition[key1].chart
                     .filterHandler(function (dimension, filters) {

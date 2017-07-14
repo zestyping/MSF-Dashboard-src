@@ -480,6 +480,7 @@ g.global_filter = {
     },
     initialize: function(dimension) {
         g.global_filter.dimension = dimension;
+        g.viz_definition.diagnosis.chart.colors('#e66');
 
         var extras = g.medical_data.extras || {};
 

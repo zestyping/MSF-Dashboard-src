@@ -39,6 +39,10 @@ div.buttons-right { position: absolute; right: 0; }
 #show-all-diagnoses-div label {
   font-weight: normal;
 }
+
+#graph-date, #graph-age {
+  margin-top: 1em;
+}
 </style>
 
 <script>
@@ -65,41 +69,33 @@ function update_global_filter() {
 
       <div class="row">
         <div class="col-md-8">
-
           <!-- Maps -->
-          <div id="chart-multiadm" class = "row"></div>
+          <div id="chart-multiadm" class="row"></div>
 
           <!-- Other Graphs -->
+          <div id="graph-date" class="row">
+            <div id="buttons-date" class="buttons-right"></div>
+            <div id="chart-date" class="viz">
+              <span id="chart_date_title"></span> <span class="filter"></span>
+            </div>
+          </div>
 
-        </div>
-        <div class="col-md-4">
-          <div class="row">
-            <div class="col-md-12">
-              <div id="buttons-diagnosis" class="buttons-right"></div>
-              <div id="chart-diagnosis" class="viz">
-                <p><span id="chart_diagnosis_title"></span> <span class="filter"> </span></p>
-                <div id="show-all-diagnoses-div" class="button btn-sm">
-                  <input type="checkbox" id="show-all-diagnoses" onchange="update_global_filter()">
-                  <label for="show-all-diagnoses">Show all diagnoses</label>
-                </div>
-              </div>
+          <div id="graph-age" class="row">
+            <div id="buttons-age" class="buttons-right"></div>
+            <div id="chart-age" class="viz">
+              <span id="chart_age_title"></span> <span class="filter"></span>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-8">
-          <div id="buttons-date" class="buttons-right"></div>
-          <div id="chart-date" class="viz">
-            <p><span id="chart_date_title"></span> <span class="filter"> </span></p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-8">
-          <div id="buttons-age" class="buttons-right"></div>
-          <div id="chart-age" class="viz">
-            <p><span id="chart_age_title"></span> <span class="filter"> </span></p>
+
+        <div class="col-md-4" id="graph-diagnosis">
+          <div id="buttons-diagnosis" class="buttons-right"></div>
+          <div id="chart-diagnosis" class="viz">
+            <p><span id="chart_diagnosis_title"></span> <span class="filter"> </span></p>
+            <div id="show-all-diagnoses-div" class="button btn-sm">
+              <input type="checkbox" id="show-all-diagnoses" onchange="update_global_filter()">
+              <label for="show-all-diagnoses">Show all diagnoses</label>
+            </div>
           </div>
         </div>
       </div>

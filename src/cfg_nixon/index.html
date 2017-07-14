@@ -20,16 +20,34 @@
             var prg_folder = '../src_core/';
         </script>
         <script src="../src_core/js/main-getlibs.js"></script>
-        <style>
-          h2#main_title { margin-top: 8px; }
-          #main_description { opacity: 0.5; }
-          #chart-multiadm > .row:first-child { position: absolute; right: 0; }
-          div.buttons-right { position: absolute; right: 0; }
-          /* Reduce space wasted by empty bottom margin in SVG charts. */
-          #chart-date svg { margin-bottom: -60px; }
-          #chart-age svg { margin-bottom: -60px; }
-          #menu_count b { font-size: 140%; }
-        </style>
+<style>
+h2#main_title { margin-top: 8px; }
+#main_description { opacity: 0.5; }
+#chart-multiadm > .row:first-child { position: absolute; right: 0; }
+div.buttons-right { position: absolute; right: 0; }
+/* Reduce space wasted by empty bottom margin in SVG charts. */
+#chart-date svg { margin-bottom: -60px; }
+#chart-age svg { margin-bottom: -60px; }
+#menu_count b { font-size: 140%; }
+
+#show-all-diagnoses-div {
+  float: right;
+  border: 1px solid #e00;
+  padding: 0 6px;
+  line-height: 1.2;
+}
+#show-all-diagnoses-div label {
+  font-weight: normal;
+}
+</style>
+
+<script>
+function update_global_filter() {
+    g.global_filter.setEnabled(!$('#show-all-diagnoses')[0].checked);
+    dc.redrawAll();
+}
+</script>
+
     </head>
     <body>
 
@@ -60,6 +78,10 @@
                             <div id="buttons-diagnosis" class="buttons-right"></div>
                             <div id="chart-diagnosis" class="viz">
                                 <p><span id="chart_diagnosis_title"></span> <span class="filter"> </span></p>
+                                <div id="show-all-diagnoses-div" class="button btn-sm">
+                                    <input type="checkbox" id="show-all-diagnoses" onchange="update_global_filter()">
+                                    <label for="show-all-diagnoses">Show all diagnoses</label>
+                                </div>
                             </div>
                         </div>
                     </div>

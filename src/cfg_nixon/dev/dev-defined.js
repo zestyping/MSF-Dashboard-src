@@ -140,7 +140,12 @@ g.module_getdata = {
                 type: 'xlsx',
                 extras: [
                     {
-                        name: 'diagnosis_chart_values',
+                        name: 'diagnosis_all_values',
+                        sheet: 'diagnosis',
+                        item_range: 'A2:A1000'
+                    },
+                    {
+                        name: 'diagnosis_shown_by_default',
                         sheet: 'diagnosis',
                         key_range: 'A2:A1000',
                         value_range: 'B2:B1000'
@@ -440,17 +445,14 @@ g.viz_definition = {
             namespace: 'none'
         },
         display_axis:{
-            x: localized_strings.chart_diagnosis_labelx,
+            x: '',  // doesn't move properly when chart is resized
             y: localized_strings.chart_diagnosis_labely
         },
         display_colors: [4],
         display_intro: 'top',
         display_filter: true,
-        domain_builder: function() {
-            return Object.keys(
-                g.medical_data.extras.diagnosis_chart_values || {});
-        },
-        domain_parameter: 'custom_ordinal',
+        domain_builder: 'none',
+        domain_parameter: 'none',
         group_builder: 'auto',
         group_parameter: {column: ['none']},
         instance_builder: 'row',
@@ -476,10 +478,38 @@ g.global_filter = {
     accessor: function(rec) {
         return rec[g.medical_headerlist.diagnosis];
     },
-    predicate: function(value) {
-        var values = Object.keys(
-            g.medical_data.extras.diagnosis_chart_values || {});
-        return values.length ? values.indexOf(value) >= 0 : true;
+    initialize: function(dimension) {
+        g.global_filter.dimension = dimension;
+
+        var extras = g.medical_data.extras || {};
+
+        var all_values = [];
+        var default_values = [];
+        for (var i = 0; i < extras.diagnosis_all_values.length; i++) {
+            var value = extras.diagnosis_all_values[i];
+            if (value) {
+                all_values.push(value);
+                if (extras.diagnosis_shown_by_default[value]) {
+                    default_values.push(value);
+                }
+            }
+        }
+        g.global_filter.all_values = all_values;
+        g.global_filter.default_values = default_values;
+    },
+    setEnabled: function(enabled) {
+        var chart = g.viz_definition.diagnosis.chart;
+        if (enabled) {
+            g.global_filter.dimension.filter(function(value) {
+                return g.global_filter.default_values.indexOf(value) >= 0;
+            });
+            domain = g.global_filter.default_values;
+        } else {
+            g.global_filter.dimension.filterAll();
+            domain = g.global_filter.all_values;
+        }
+        setChartDomainToFixedList(chart, domain);
+        chart.height(80 + 30 * domain.length);
     }
 };
 

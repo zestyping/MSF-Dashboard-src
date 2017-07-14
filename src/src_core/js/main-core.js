@@ -577,11 +577,6 @@ function generateDashboard(){
         }
         main_core.get_dimension(g.viz_definition[key1].dimension_builder, g.viz_definition[key1].dimension_parameter);
 
-        if (g.global_filter) {
-            g.global_filter.dimension = cf.dimension(g.global_filter.accessor);
-            g.global_filter.dimension.filter(g.global_filter.predicate);
-        }
-
         //------------------------------------------------------------------------------------
         // Group: Charts groups setup
         //------------------------------------------------------------------------------------
@@ -2511,6 +2506,11 @@ function generateDashboard(){
         var chart = g.viz_definition[key].chart;
         if (chart) chart.filterAll();
     }
+    if (g.global_filter) {
+        g.global_filter.initialize(cf.dimension(g.global_filter.accessor));
+        g.global_filter.setEnabled(true);
+        dc.redrawAll();
+    }
 
     $('#modal').modal('hide');
 }
@@ -2557,7 +2557,6 @@ function setChartDomainToFixedList(chart, domain) {
         return domainPairs;
     });
 }
-
 
 /** Show only items in the domain, sorted by value. */
 function setChartDomainToSortedList(chart, domain) {

@@ -496,16 +496,29 @@ module_getdata.load_medical_xls = function(options) {
 
 module_getdata.read_extra_from_workbook = function(extras, workbook, spec) {
     var sheet = workbook.Sheets[spec.sheet];
-    var result = {};
-    var keyAddrs = addrsInRange(spec.key_range);
-    var valueAddrs = addrsInRange(spec.value_range);
-    for (var i = 0; i < keyAddrs.length && i < valueAddrs.length; i++) {
-        var key = (sheet[keyAddrs[i]] || {}).v || '';
-        var value = (sheet[valueAddrs[i]] || {}).v || '';
-        if (key !== '' && value !== '') {
-            result[key] = value;
+    var result;
+
+    if (spec.key_range && spec.value_range) {
+        result = {};
+        var keyAddrs = addrsInRange(spec.key_range);
+        var valueAddrs = addrsInRange(spec.value_range);
+        for (var i = 0; i < keyAddrs.length && i < valueAddrs.length; i++) {
+            var key = (sheet[keyAddrs[i]] || {}).v || '';
+            var value = (sheet[valueAddrs[i]] || {}).v || '';
+            if (key !== '' && value !== '') {
+                result[key] = value;
+            }
         }
     }
+
+    if (spec.item_range) {
+        result = [];
+        var addrs = addrsInRange(spec.item_range);
+        for (var i = 0; i < addrs.length; i++) {
+            result.push((sheet[addrs[i]] || {}).v || '');
+        }
+    }
+
     extras[spec.name] = result;
 };
 

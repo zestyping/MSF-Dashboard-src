@@ -275,17 +275,19 @@ function generateDashboard(){
             }
         };
 
-        main_core.get_domain = function(builder, parameter) {
-            if(!(builder == 'none')){
-                if (builder in domainBuilder) { 
+        main_core.get_domain = function(builder) {
+            if (builder !== 'none') {
+                if (typeof builder === 'function') {
+                    g.viz_definition[key1].domain = builder();
+                } else if (builder in domainBuilder) { 
                     g.viz_definition[key1].domain = domainBuilder[builder]();
-                }else{
-                    console.log('main-core.js: Your custom Domain Builder is not defined for viz: '+key1);
+                } else {
+                    console.log('main-core.js: viz ' + key1 + ' has an unknown domain_builder: ' + builder);
                 }
             }
         }
 
-        main_core.get_domain(g.viz_definition[key1].domain_builder, g.viz_definition[key1].domain_parameter);
+        main_core.get_domain(g.viz_definition[key1].domain_builder);
 
         //------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------

@@ -86,7 +86,6 @@ function generate_display() {
 
 	$("#selectform").change(function(){
 		g.medical_filecurrent = $('#selectform').val();
-		g.medical_filetypecurrent = g.medical_filecurrent.substr(g.medical_filecurrent.length - 3);
 		module_getdata.reload_medical();
 	});
 

@@ -130,6 +130,7 @@ module_getdata.load_propagate = function(){
 // Load a files with d3: 'json', 'tsv', 'csv'
 module_getdata.load_filed3 = function(file,filetype,save,exit_fun) {
 
+    filetype = filetype || file.replace(/^.*\./, '');
     if(filetype == 'txt' || filetype == 'TXT'){filetype = 'tsv';}
 
     d3.queue()
@@ -150,6 +151,7 @@ module_getdata.load_filed3 = function(file,filetype,save,exit_fun) {
 
 module_getdata.load_filefs = function(file,filetype,save,exit_fun) {
 
+    filetype = filetype || file.replace(/^.*\./, '');
     var fs = nw.require('fs');
 
     fs.readFile(file, 'utf-8', function (error, data) {
@@ -416,14 +418,6 @@ module_getdata.load_medical_xlsfolders = function(path, options) {
     // Initialise with first medical file in the list
     g.medical_filecurrent = g.medical_filelist[0];
 
-    /**
-     * Stores the type of the file about to be read from {@link module:g.medical_filecurrent} in order to use the correct parsing method in {@link module:main_loadfiles~queue_medical}.
-     * @constant
-     * @type {String}
-     * @alias module:g.medical_filetypecurrent
-     **/
-    g.medical_filetypecurrent = g.medical_filecurrent.substr(g.medical_filecurrent.length - 3);
-
     module_getdata.load_medical_xls(options);
 }
 
@@ -528,9 +522,9 @@ module_getdata.reload_medical = function() {
     if (g.module_getdata.medical.medical.method == 'medicalxlsx') {
         module_getdata.load_medical_xls(g.module_getdata.medical.medical.options);
     }else if(g.module_getdata.medical.medical.method == 'medicald3server'){
-        module_getdata.load_filed3(g.medical_folder + g.medical_filecurrent, g.medical_filetypecurrent,'medical_data',module_getdata.afterload_medical_d3);
+        module_getdata.load_filed3(g.medical_folder + g.medical_filecurrent, null, 'medical_data', module_getdata.afterload_medical_d3);
     }else if(g.module_getdata.medical.medical.method == 'medicalfs'){
-        module_getdata.load_filefs('.' + g.medical_folder + g.medical_filecurrent, g.medical_filetypecurrent,'medical_data',module_getdata.afterload_medical_d3);
+        module_getdata.load_filefs('.' + g.medical_folder + g.medical_filecurrent, null, 'medical_data', module_getdata.afterload_medical_d3);
     }else{
         console.log('main-getdata.js ~l475: The medical data parsing method does not currently allow selecting from folder.');;
     }
@@ -601,14 +595,6 @@ module_getdata.load_medical_fs = function(path, ftype) {
     // Initialise with first medical file in the list
     g.medical_filecurrent = g.medical_filelist[0];
 
-    /**
-     * Stores the type of the file about to be read from {@link module:g.medical_filecurrent} in order to use the correct parsing method in {@link module:main_loadfiles~queue_medical}.
-     * @constant
-     * @type {String}
-     * @alias module:g.medical_filetypecurrent
-     **/
-    g.medical_filetypecurrent = g.medical_filecurrent.substr(g.medical_filecurrent.length - 3);
-
     module_getdata.load_filefs('.' + g.medical_folder + g.medical_filecurrent, ftype,'medical_data',module_getdata.afterload_medical_d3);
 
 }
@@ -640,15 +626,7 @@ module_getdata.load_medical_d3 = function(ftype) {
     // Initialise with first medical file in the list
     g.medical_filecurrent = g.medical_filelist[0];
 
-    /**
-     * Stores the type of the file about to be read from {@link module:g.medical_filecurrent} in order to use the correct parsing method in {@link module:main_loadfiles~queue_medical}.
-     * @constant
-     * @type {String}
-     * @alias module:g.medical_filetypecurrent
-     **/
-    g.medical_filetypecurrent = g.medical_filecurrent.substr(g.medical_filecurrent.length - 3);
-
-    module_getdata.load_filed3(g.medical_folder + g.medical_filecurrent, g.medical_filetypecurrent,'medical_data',module_getdata.afterload_medical_d3);
+    module_getdata.load_filed3(g.medical_folder + g.medical_filecurrent, null, 'medical_data', module_getdata.afterload_medical_d3);
 };
 
 module_getdata.afterload_medical_d3 = function(data) {

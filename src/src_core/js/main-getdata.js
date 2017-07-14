@@ -513,7 +513,7 @@ module_getdata.read_extra_from_workbook = function(extras, workbook, spec) {
 
 module_getdata.reload_medical = function() {
     if (g.module_getdata.medical.medical.method == 'medicalxlsx') {
-        module_getdata.load_medical_xls();
+        module_getdata.load_medical_xls(g.module_getdata.medical.medical.options);
     }else if(g.module_getdata.medical.medical.method == 'medicald3server'){
         module_getdata.load_filed3(g.medical_folder + g.medical_filecurrent, g.medical_filetypecurrent,'medical_data',module_getdata.afterload_medical_d3);
     }else if(g.module_getdata.medical.medical.method == 'medicalfs'){

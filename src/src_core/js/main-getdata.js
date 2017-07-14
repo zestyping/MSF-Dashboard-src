@@ -392,12 +392,11 @@ module_getdata.load_medical_xlsfolders = function(path, options) {
     g.medical_filelist_raw = fs.readdirSync('.'+g.medical_folder);
 
     /**
-     * Stores the name of the file currently being read. Starts with the first file in the {@link module:g.medical_filelist} and then {@link module:main_loadfiles~generate_display} gives the user the option to choose between all the available files.
-     * @constant
-     * @type {String}
-     * @alias module:g.medical_filecurrent
+     * Stores the name of the files currently being read. Starts with just the first file in the {@link module:g.medical_filelist} and then {@link module:main_loadfiles~generate_display} gives the user the option to choose any subset of all the available files.
+     * @type {Array.<String>}
+     * @alias module:g.medical_files
      */
-    g.medical_filecurrent = undefined;
+    g.medical_files = [];
 
     /**
      * Lists files in the datafolder that matches the extension criteria (currently *.txt | *.TXT | *.csv | *.CSV) in the {@link module:g.medical_filelist_raw}.
@@ -409,27 +408,38 @@ module_getdata.load_medical_xlsfolders = function(path, options) {
 
     // Check file format (currently only .text / tabulation separated values - tsv)
     g.medical_filelist_raw.forEach(function(f){
-        var cond = f.substr(f.length - 5)=='.xlsx' || f.substr(f.length - 5)=='.XLSX';
-        if(cond){
+        var ext = f.replace(/^.*\./, '');
+        if (!f.startsWith('~') && ext.toLowerCase() === 'xlsx') {
             g.medical_filelist.push(f);
         }
     });
 
     // Initialise with first medical file in the list
-    g.medical_filecurrent = g.medical_filelist[0];
+    g.medical_files = [g.medical_filelist[0]];
 
     module_getdata.load_medical_xls(options);
 }
 
 module_getdata.load_medical_xls = function(options) {
-    var X = XLSX;
-    var name = '.' + g.medical_folder + g.medical_filecurrent;
-
-    var fs = nw.require('fs');
-
     var medical_data = [];
+    var extras = {};
+    var specs = (options || {}).extras || [];
 
-    var data = fs.readFileSync(name, 'binary');
+    g.medical_files.forEach(function(filename) {
+        module_getdata.load_medical_xls_file(
+            '.' + g.medical_folder + filename, specs, medical_data, extras);
+    });
+
+    /* Save results and continue with data loading */
+    medical_data.extras = extras;
+    g.medical_data = medical_data;
+    module_getdata.afterload_medical_d3(medical_data);
+};
+
+module_getdata.load_medical_xls_file = function(path, specs, medical_data, extras) {
+    console.log('start reading from ' + path);
+    var fs = nw.require('fs');
+    var data = fs.readFileSync(path, 'binary');
 
     /* Call XLSX */
     var workbook = XLSX.read(data, {type: 'binary'});
@@ -473,47 +483,37 @@ module_getdata.load_medical_xls = function(options) {
             medical_data.push(record);
         }
     };
-    console.log('records loaded from ' + name + ':', medical_data.length);
+    console.log('finished loading records from ' + path);
 
     /* Get extra data */
-    var specs = (options || {}).extras || [];
-    var extras = {};
     for (var i = 0; i < specs.length; i++) {
         module_getdata.read_extra_from_workbook(extras, workbook, specs[i]);
     }
-    medical_data.extras = extras;
-
-    /* Save results and continue with next file */
-    g.medical_data = medical_data;
-    module_getdata.afterload_medical_d3(medical_data);
 };
 
 module_getdata.read_extra_from_workbook = function(extras, workbook, spec) {
     var sheet = workbook.Sheets[spec.sheet];
-    var result;
 
     if (spec.key_range && spec.value_range) {
-        result = {};
+        if (!(spec.name in extras)) extras[spec.name] = {};
         var keyAddrs = addrsInRange(spec.key_range);
         var valueAddrs = addrsInRange(spec.value_range);
         for (var i = 0; i < keyAddrs.length && i < valueAddrs.length; i++) {
             var key = (sheet[keyAddrs[i]] || {}).v || '';
             var value = (sheet[valueAddrs[i]] || {}).v || '';
             if (key !== '' && value !== '') {
-                result[key] = value;
+                extras[spec.name][key] = value;
             }
         }
     }
 
     if (spec.item_range) {
-        result = [];
+        if (!(spec.name in extras)) extras[spec.name] = [];
         var addrs = addrsInRange(spec.item_range);
         for (var i = 0; i < addrs.length; i++) {
-            result.push((sheet[addrs[i]] || {}).v || '');
+            extras[spec.name].push((sheet[addrs[i]] || {}).v || '');
         }
     }
-
-    extras[spec.name] = result;
 };
 
 // d3.js (local file)
@@ -522,9 +522,9 @@ module_getdata.reload_medical = function() {
     if (g.module_getdata.medical.medical.method == 'medicalxlsx') {
         module_getdata.load_medical_xls(g.module_getdata.medical.medical.options);
     }else if(g.module_getdata.medical.medical.method == 'medicald3server'){
-        module_getdata.load_filed3(g.medical_folder + g.medical_filecurrent, null, 'medical_data', module_getdata.afterload_medical_d3);
+        module_getdata.load_filed3(g.medical_folder + g.medical_files[0], null, 'medical_data', module_getdata.afterload_medical_d3);
     }else if(g.module_getdata.medical.medical.method == 'medicalfs'){
-        module_getdata.load_filefs('.' + g.medical_folder + g.medical_filecurrent, null, 'medical_data', module_getdata.afterload_medical_d3);
+        module_getdata.load_filefs('.' + g.medical_folder + g.medical_files[0], null, 'medical_data', module_getdata.afterload_medical_d3);
     }else{
         console.log('main-getdata.js ~l475: The medical data parsing method does not currently allow selecting from folder.');;
     }
@@ -543,6 +543,7 @@ module_getdata.load_medical_d3noserver = function(files, ftype) {
     module_getdata.load_medical_d3(ftype);
 };
 
+// TODO(ping): THIS FUNCTION IS BROKEN
 module_getdata.load_medical_fs = function(path, ftype) {
     var fs = nw.require('fs');
 
@@ -566,9 +567,9 @@ module_getdata.load_medical_fs = function(path, ftype) {
      * Stores the name of the file currently being read. Starts with the first file in the {@link module:g.medical_filelist} and then {@link module:main_loadfiles~generate_display} gives the user the option to choose between all the available files.
      * @constant
      * @type {String}
-     * @alias module:g.medical_filecurrent
+     * @alias module:g.medical_files
      */
-    g.medical_filecurrent = undefined;
+    g.medical_files = [];
 
     /**
      * Lists files in the datafolder that matches the extension criteria (currently *.txt | *.TXT | *.csv | *.CSV) in the {@link module:g.medical_filelist_raw}.
@@ -593,9 +594,9 @@ module_getdata.load_medical_fs = function(path, ftype) {
     });
 
     // Initialise with first medical file in the list
-    g.medical_filecurrent = g.medical_filelist[0];
+    g.medical_files = [g.medical_filelist[0]];
 
-    module_getdata.load_filefs('.' + g.medical_folder + g.medical_filecurrent, ftype,'medical_data',module_getdata.afterload_medical_d3);
+    module_getdata.load_filefs('.' + g.medical_folder + g.medical_files[0], ftype,'medical_data',module_getdata.afterload_medical_d3);
 
 }
 
@@ -624,9 +625,9 @@ module_getdata.load_medical_d3 = function(ftype) {
     });
 
     // Initialise with first medical file in the list
-    g.medical_filecurrent = g.medical_filelist[0];
+    g.medical_files = [g.medical_filelist[0]];
 
-    module_getdata.load_filed3(g.medical_folder + g.medical_filecurrent, null, 'medical_data', module_getdata.afterload_medical_d3);
+    module_getdata.load_filed3(g.medical_folder + g.medical_files[0], null, 'medical_data', module_getdata.afterload_medical_d3);
 };
 
 module_getdata.afterload_medical_d3 = function(data) {
@@ -639,7 +640,7 @@ module_getdata.afterload_medical_d3 = function(data) {
    */
   g.medical_keylist = Object.keys(g.medical_headerlist);
 
-  console.log('main-getdata.js ~l630: Medical file selected: ' + g.medical_filecurrent);
+  console.log('main-getdata.js ~l630: Medical files selected: ' + g.medical_files);
 
 
   // Load Optional Module: module-datacheck.js

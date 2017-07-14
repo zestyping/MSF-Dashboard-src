@@ -489,9 +489,13 @@ g.global_filter = {
         for (var i = 0; i < extras.diagnosis_all_values.length; i++) {
             var value = extras.diagnosis_all_values[i];
             if (value) {
-                all_values.push(value);
+                if (all_values.indexOf(value) === -1) {
+                    all_values.push(value);
+                }
                 if (extras.diagnosis_shown_by_default[value]) {
-                    default_values.push(value);
+                    if (default_values.indexOf(value) === -1) {
+                        default_values.push(value);
+                    }
                 }
             }
         }

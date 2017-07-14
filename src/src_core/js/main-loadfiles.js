@@ -24,7 +24,7 @@
 // 6) Generate Display
 //------------------------------------------------------------------------------------
 /**
- * Generates the general display to select {@link module:g.medical_filecurrent} in {@link module:g.medical_filelist} (and launches {@link module:main_loadfiles~queue_medical} when a new file is selected from the list). And give the option to load the dashboard with the function {@link module:main-core~generateDashboard}.<br>
+ * Generates the general display to select {@link module:g.medical_files} in {@link module:g.medical_filelist} (and launches {@link module:main_loadfiles~queue_medical} when a new file is selected from the list). And give the option to load the dashboard with the function {@link module:main-core~generateDashboard}.<br>
  Also loads {@link module:module_datacheck} and {@link module:module-lang} and embeds some related displays (quick datacheck summary {@link module:module_datacheck~display}, errors log {@link module:module_datacheck~showlog} and related interactions {@link module:module_datacheck~interaction} for the datacheck module and language switch buttons {@link module:module_lang~display} for the lang module).
  * @function
  * @requires queue_medical
@@ -36,10 +36,10 @@
 function generate_display() {
 	var html = '';
 	if (g.medical_filelist) {
-		html += '<p><b>'+g.module_lang.text[g.module_lang.current].loadfiles_choose+'</b></p><select class="select-lf" id="selectform">';
-		html +='<p><option value="'+g.medical_filecurrent+'">'+g.medical_filecurrent+'</option>';
-		g.medical_filelist.forEach(function(f){
-			if (f!==g.medical_filecurrent) {html +='<option value="'+f+'">'+f+'</option>';};
+		html += '<p><b>'+g.module_lang.text[g.module_lang.current].loadfiles_choose+'</b></p><select multiple class="select-lf" id="selectform" size=8>';
+		g.medical_filelist.forEach(function(f) {
+            sel = g.medical_files.indexOf(f) >= 0 ? ' selected': '';
+			html +='<option value="' + f + '"' + sel + '>' + f + '</option>';
 		});
 	}
 	html += '</select> <span id="langselect"></span></p>';
@@ -85,7 +85,7 @@ function generate_display() {
 	$('.modal-content').html(html);
 
 	$("#selectform").change(function(){
-		g.medical_filecurrent = $('#selectform').val();
+		g.medical_files = $('#selectform').val();
 		module_getdata.reload_medical();
 	});
 

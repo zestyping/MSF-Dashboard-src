@@ -35,52 +35,24 @@
  **/
 function generate_display() {
 	var html = '';
+    var loc = g.module_lang.text[g.module_lang.current];
+    html += '<div class="file-select">';
 	if (g.medical_filelist) {
-		html += '<p><b>'+g.module_lang.text[g.module_lang.current].loadfiles_choose+'</b></p><select multiple class="select-lf" id="selectform" size=8>';
+		html += '<h3>' + loc.loadfiles_choose + '</h3>';
+        html += '<select multiple class="select-lf" id="selectform" size=8>';
 		g.medical_filelist.forEach(function(f) {
             sel = g.medical_files.indexOf(f) >= 0 ? ' selected': '';
 			html +='<option value="' + f + '"' + sel + '>' + f + '</option>';
 		});
 	}
 	html += '</select> <span id="langselect"></span></p>';
-	html += '<p>'+g.module_lang.text[g.module_lang.current].loadfiles_selected[0]+' <b>' + g.medical_data.length + '</b> '+g.module_lang.text[g.module_lang.current].loadfiles_selected[1]+'</p>';
+    html += '</div>';
 
-
-	// Load Here Optional Modules Display:
-	//------------------------------------------------------------------------------------
-	//------------------------------------------------------------------------------------
-
-	html += '<div class="row">';
-
-	// Load Optional Module: module-datacheck.js
-	//------------------------------------------------------------------------------------
-	html += '<div class="col-md-5">';
+    html += '<div class="file-details">';
 	html += module_datacheck.display();
 	html += '</div>';
 
-	// Load Optional Module: module-datacheck.js
-	//------------------------------------------------------------------------------------
-	html += '<div id="datalog" class="col-md-7">';
-	html += '</div>';
-
-
-	// Load Optional Module: module-colorscale.js
-	//------------------------------------------------------------------------------------
-	//html += '<div class="col-md-6">';
-	//html += module_colorscale_display();
-	//html += '</div>';
-
-	html += '</div>';
-	//------------------------------------------------------------------------------------
-	//------------------------------------------------------------------------------------
-
-
-	html += '<div class="row"><div class="col-md-12"><p><br><button class="select-lf" id="loaddashboard">'+g.module_lang.text[g.module_lang.current].loadfiles_load+'</button></p></div></div>';
-
-	html += '<div class="row">';
-
-	html += '</div>';
-
+	html += '<div class="row"><div class="col-md-12"><p><br><button class="select-lf" id="loaddashboard">' + loc.loadfiles_load + '</button></p></div></div>';
 
 	$('.modal-content').html(html);
 
@@ -119,4 +91,10 @@ function generate_display() {
 	//------------------------------------------------------------------------------------
 	//------------------------------------------------------------------------------------
 
+}
+
+function plural(n, plural, singular) {
+    plural = plural || 's';
+    singular = singular || '';
+    return n === 1 ? singular : plural;
 }

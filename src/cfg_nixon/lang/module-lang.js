@@ -269,9 +269,9 @@ g.module_lang.text.eng = {
 	main_title: 'MSF Dashboard v1.0.0 \u00b7 Nixon Memorial Hospital',
 	main_description: 'For feedback or questions, please contact the MSF UK Manson Unit at <a href="mailto:gis.mansonunit@london.msf.org">gis.mansonunit@london.msf.org</a>.',
 
-	loadfiles_choose: 'CHOOSE A FILE TO LOAD',
+	loadfiles_choose: 'Choose data files to load',
 	loadfiles_selected: ['The file currently selected contains','records.'],
-	loadfiles_load: 'Load the Dashboard',
+	loadfiles_load: 'Open the Dashboard',
 
 	chart_date_title: 'Date',
 	chart_date_labelx: '',

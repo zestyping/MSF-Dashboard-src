@@ -889,12 +889,12 @@ module_datacheck.interaction = function(){
  */
 module_datacheck.display = function(){
 	
-	// Title
-	var html = '<p><b>'+g.module_lang.text[g.module_lang.current].datacheck_title+'</b></p>';
+    var html = '';
 
-	// Intro
-	html += '<p>'+g.module_lang.text[g.module_lang.current].datacheck_intro+'</p>';
-	
+    var n = g.medical_data.length;
+    html += `<span class="record-count">${n} record${plural(n)}</span>`;
+    html += ` found in the selected file${plural(g.medical_filelist.length)}.`;
+
 	// Content
 	html += '<table style="font-size:13px;">';
 	html += '<tr><th>'+g.module_lang.text[g.module_lang.current].datacheck_header+'</th><th>&nbsp;#'+g.module_lang.text[g.module_lang.current].datacheck_error+'</th><th>&nbsp;(%'+g.module_lang.text[g.module_lang.current].datacheck_error+')</th><th>&nbsp;#'+g.module_lang.text[g.module_lang.current].datacheck_empty+'</th><th>&nbsp;(%'+g.module_lang.text[g.module_lang.current].datacheck_empty+')</th></tr>'
@@ -932,5 +932,7 @@ module_datacheck.display = function(){
 
 	html += '</table>';
 
+	html += '<div id="datalog" class="col-md-7">';
+	html += '</div>';
 	return html;
 }

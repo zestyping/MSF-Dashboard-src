@@ -566,6 +566,10 @@ module_colorscale.lockcolor = function(source){
 			var scalesvalues_current = [];
 		}
 
+        // The code above generates really confusing colour scales.
+        // Instead, let's do something simple.
+        var scalesvalues_current = selectScaleValues(unique_values);
+
 		// Pushes values (without duplicates)
 		g.module_colorscale.valuescurrent = ['NA'];
 		var temp_check = {};
@@ -592,4 +596,16 @@ module_colorscale.nice_limits = function(val) {
 		val = parseInt(1 + val/corr)*corr;
 	}
 	return val;
+}
+
+function selectScaleValues(uniqueValues) {
+    var max = null;
+    uniqueValues.forEach(function (val) {
+        if (max === null || val > max) max = val;
+    });
+    if (max < 5) {
+        return [0, 1, 2, 3, 4].slice(0, max + 1);
+    }
+    var step = Math.ceil(max/4);
+    return [0, step, step*2, step*3, step*4];
 }

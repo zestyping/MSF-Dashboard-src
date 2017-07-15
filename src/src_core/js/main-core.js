@@ -1504,16 +1504,20 @@ function generateDashboard(){
                         }
                         
                         html += '<table style="margin-left: 5px; font-size:1em">';
-                        for(var i = g.module_colorscale.valuescurrent.length - 1;i > 1;i--){
-							
-                            var minVal = numberWithCommas(g.module_colorscale.valuescurrent[i - 1].toFixed(precision));
-                            var maxVal = numberWithCommas(g.module_colorscale.valuescurrent[i].toFixed(precision));
+                        var scale = g.module_colorscale.valuescurrent;
+                        for(var i = scale.length - 1;i > 1;i--){
+                            var minVal = numberWithCommas((scale[i - 1] + 1).toFixed(precision));
+                            var maxVal = numberWithCommas(scale[i].toFixed(precision));
 
 							html += '<tr><td><i style="background:' + g.module_colorscale.colors[g.module_colorscale.colorscurrent][i - 1] + '"></i></td>';
 							if (g.module_colorscale.mapunitcurrent == 'Completeness') {
                                 html += '<td>≤ </td><td>' + maxVal + '%</td></tr>';
                             } else {
-                                html += '<td>≤ </td><td>' + maxVal + '</td></tr>';
+                                if (minVal === maxVal) {
+                                    html += '<td></td><td>' + maxVal + '</td></tr>';
+                                } else {
+                                    html += '<td>' + minVal + ' &ndash;&nbsp;</td><td>' + maxVal + '</td></tr>';
+                                }
                             }
                             					
                         }

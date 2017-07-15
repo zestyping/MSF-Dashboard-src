@@ -185,7 +185,7 @@ module_interface.display = function(){
                     break;
                 case 'expand':
                     var icon = '◰';
-                    icon = 'Expand';
+                    icon = 'Larger map';
                     break;
                 case 'toimage': // to be implemented
                     var icon = 'I';
@@ -297,25 +297,15 @@ module_interface.display = function(){
                     });
                     break;
                 case 'expand': 
-                    $('#'+button+'-'+key1).click(function(){
+                    var maps = g.viz_definition.multiadm.maps;
+                    $('#'+button+'-'+key1).click(function() {
                         g.geometry_keylist.forEach(function(key) {
-                            if ($('#map-' + key).height() <= 500) {
-                               setTimeout(function() {
-                                    $('#map-' + key).css('height','845px');
-                                    g.viz_definition.multiadm.maps[key].invalidateSize(true);
-                                }, 500);
-                               setTimeout(function() {
-                                    zoomToGeom(g.geometry_data[key],g.viz_definition.multiadm.maps[key]);
-                                }, 1000);
-                            }else{
-                               setTimeout(function() {
-                                    $('#map-' + key).css('height','410px');
-                                    g.viz_definition.multiadm.maps[key].invalidateSize(true);
-                                }, 500);
-                               setTimeout(function() {
-                                    zoomToGeom(g.geometry_data[key],g.viz_definition.multiadm.maps[key]);
-                                },1000); 
-                            }; 
+                            var div = $('#map-' + key);
+                            var enlarge = (div.height() <= 500);
+                            div.css('height', enlarge ? '700px' : '400px');
+                            maps[key].invalidateSize(true);
+                            $('#'+button+'-'+key1).text(
+                                enlarge ? 'Smaller map' : 'Larger map');
                         });
                     });
                     break;

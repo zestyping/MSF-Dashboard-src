@@ -2501,11 +2501,7 @@ function generateDashboard(){
     // Initiate
     module_colorscale.lockcolor(g.module_colorscale.modecurrent);
 
-    // Reset all chart filters (but not the global filter if any)
-    for (var key in g.viz_definition) {
-        var chart = g.viz_definition[key].chart;
-        if (chart) chart.filterAll();
-    }
+    resetAllChartFilters();
     if (g.global_filter) {
         g.global_filter.initialize(cf.dimension(g.global_filter.accessor));
         g.global_filter.setEnabled(true);
@@ -2567,4 +2563,16 @@ function setChartDomainToSortedList(chart, domain) {
     });
 }
 
-
+/** Reset all chart filters (but not the global filter if any) */
+function resetAllChartFilters() {
+    for (var viz in g.viz_definition) {
+        var chart = g.viz_definition[viz].chart;
+        if (chart) chart.filterAll();
+        var charts = g.viz_definition[viz].charts;
+        if (charts) {
+            for (var level in charts) {
+                charts[level].filterAll();
+            };
+        }
+    }
+}

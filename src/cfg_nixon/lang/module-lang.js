@@ -236,7 +236,7 @@ g.module_lang.text.eng = {
 		    }
 		},
     },
-	datatable_legend: 'Sex : 1 = Male, 2 = Female | Pregnancy : 1 = Yes, 2 = No | Dehydration : A = Light, B = Moderate, C = Severe | Outcome : 1 = Cured, 2 = Death, 3 = Interrupted follow-up, 4 = Transfered',
+	datatable_legend: '',
 	interface_menutitle: 'MENU',
 	interface_menuepiwk: 'Quickly filter the \'n\' last weeks',
 	interface_menureset: 'Reset all filters',

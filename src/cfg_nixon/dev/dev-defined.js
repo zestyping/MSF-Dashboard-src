@@ -377,7 +377,7 @@ localized_strings = g.module_lang.text[g.module_lang.current];
  **/
 g.viz_definition = {
     multiadm: {
-        buttons_list: ['help', 'reset', 'expand'],  // order: right to left
+        buttons_list: ['expand', 'reset', 'help'],
         dimension_builder: 'multiadm',
         dimension_parameter: {
             column: 'none',
@@ -395,7 +395,7 @@ g.viz_definition = {
     },
 
     date: {
-        buttons_list: ['help', 'reset'],
+        buttons_list: ['reset', 'help'],
         dimension_builder: 'date',
         dimension_parameter: {
             column: 'date',
@@ -416,7 +416,7 @@ g.viz_definition = {
         instance_builder: 'bar',
     },
     age: {
-        buttons_list: ['help', 'reset'],
+        buttons_list: ['reset', 'help'],
         instance_builder: 'bar',
         dimension_builder: 'integer',
         dimension_parameter: {
@@ -437,7 +437,7 @@ g.viz_definition = {
         group_parameter: {column: ['none']},
     },
     diagnosis: {
-        buttons_list: ['help', 'reset'],
+        buttons_list: ['reset', 'help'],
         dimension_builder: 'auto',
         dimension_parameter: {
             column: 'diagnosis',
@@ -515,7 +515,11 @@ g.global_filter = {
         }
         setChartDomainToFixedList(chart, domain);
         chart.height(80 + 30 * domain.length);
+
+        // The animated transition is nonsensical when rows appear/disappear.
+        disableTransitions(g.viz_definition.diagnosis.chart);
         dc.redrawAll();
+        enableTransitions(g.viz_definition.diagnosis.chart);
         module_colorscale.lockcolor('Auto');
     }
 };
@@ -539,3 +543,38 @@ g.viz_timeshare = [];
 
 g.module_multiadm = g.module_multiadm || {};
 g.module_multiadm.default_bounds = [[7.8, -11.4], [8.2, -10.4]];
+
+g.configure_charts = function() {
+    var defs = g.viz_definition;
+
+    configureWideBarChart(defs.date.chart);
+    configureWideBarChart(defs.age.chart);
+    configureRowChart(defs.diagnosis.chart);
+
+    enableTransitions(defs.date.chart);
+    enableTransitions(defs.age.chart);
+    enableTransitions(defs.diagnosis.chart);
+};
+
+function disableTransitions(chart) {
+    chart.transitionDuration(0);
+}
+
+function enableTransitions(chart) {
+    chart.transitionDuration(200);
+};
+
+function configureWideBarChart(chart) {
+    chart.renderHorizontalGridLines(true);
+    chart.yAxis().ticks(4);
+    chart.yAxis().tickFormat(function(y) {
+        return (y === Math.floor(y)) ? y : '';
+    });
+}
+
+function configureRowChart(chart) {
+    chart.xAxis().ticks(4);
+    chart.xAxis().tickFormat(function(x) {
+        return (x === Math.floor(x)) ? x : '';
+    });
+}

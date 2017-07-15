@@ -49,26 +49,6 @@
     border-color:#ee0000!important;
     color:white;
 }
-.help{
-    float: right;
-    top: 0px;
-}
-.reset{
-    float: right;
-    top: 0px;
-}
-.expand{
-    float: right;
-    top: 0px;
-}
-.parameters{
-    float: right;
-    top: 0px;
-}
-.lockcolor{
-    float: right;
-    top: 0px;
-}
 #gobacktodashboard{
     right: 10px;
     top: 10px;

@@ -936,7 +936,7 @@ function generateDashboard(){
                         if(filter){
                             if(filter instanceof Array){
                                 if(filter[0].length >= 2){
-                                    var format = d3.time.format('%d %b %Y');
+                                    var format = d3.time.format('%e %b %Y');
                                     s = format(filter[0][0]) + ' to ' + format(filter[0][1]);
                                 }else if(filter[0].length >= 1){
                                     s = dc.utils.printSingleValue(filter[0]);
@@ -2509,8 +2509,12 @@ function generateDashboard(){
     if (g.global_filter) {
         g.global_filter.initialize(cf.dimension(g.global_filter.accessor));
         g.global_filter.setEnabled(true);
-        dc.redrawAll();
     }
+
+    if (g.configure_charts) {
+        g.configure_charts();
+    }
+    dc.redrawAll();
 
     $('#modal').modal('hide');
 }

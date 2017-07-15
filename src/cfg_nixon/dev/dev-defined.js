@@ -515,6 +515,8 @@ g.global_filter = {
         }
         setChartDomainToFixedList(chart, domain);
         chart.height(80 + 30 * domain.length);
+        dc.redrawAll();
+        module_colorscale.lockcolor('Auto');
     }
 };
 

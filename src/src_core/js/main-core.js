@@ -2496,11 +2496,11 @@ function generateDashboard(){
             module_datatable.refreshTable();
         }  
     };
-                            
 
     // Initiate
     module_colorscale.lockcolor(g.module_colorscale.modecurrent);
 
+    resetMapView();
     resetAllChartFilters();
     if (g.global_filter) {
         g.global_filter.initialize(cf.dimension(g.global_filter.accessor));
@@ -2535,7 +2535,7 @@ function remove(array, element) {
     }
 }
 
-/** Show only items in the domain, in the domain's order. */
+/** Shows only items in the domain, in the domain's order. */
 function setChartDomainToFixedList(chart, domain) {
     chart.data(function(group) {
         var pairs = group.all();
@@ -2554,7 +2554,7 @@ function setChartDomainToFixedList(chart, domain) {
     });
 }
 
-/** Show only items in the domain, sorted by value. */
+/** Shows only items in the domain, sorted by value. */
 function setChartDomainToSortedList(chart, domain) {
     chart.data(function(group) {
         return group.top(Infinity).filter(function(d) {
@@ -2563,7 +2563,7 @@ function setChartDomainToSortedList(chart, domain) {
     });
 }
 
-/** Reset all chart filters (but not the global filter if any) */
+/** Resets all chart filters (but not the global filter if any). */
 function resetAllChartFilters() {
     for (var viz in g.viz_definition) {
         var chart = g.viz_definition[viz].chart;
@@ -2574,5 +2574,18 @@ function resetAllChartFilters() {
                 charts[level].filterAll();
             };
         }
+    }
+}
+
+/** Resets the map's zoom level and viewport. */
+function resetMapView() {
+    var level = g.geometry_keylist[0];
+    var map = g.viz_definition.multiadm.maps[level];
+    if (g.module_multiadm.default_bounds) {
+        map.fitBounds(g.module_multiadm.default_bounds);
+    } else if ($('#select-'+level).val() == 'NA') {
+        zoomToGeom(g.geometry_data[level], map);
+    } else {
+        $('#select-'+level).val('NA').change();
     }
 }

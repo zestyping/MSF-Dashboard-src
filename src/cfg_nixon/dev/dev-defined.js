@@ -534,3 +534,6 @@ g.viz_timeline = 'date';
  */
 g.viz_timeshare = [];
 
+
+g.module_multiadm = g.module_multiadm || {};
+g.module_multiadm.default_bounds = [[7.8, -11.4], [8.2, -10.4]];

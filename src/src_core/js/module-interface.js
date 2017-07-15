@@ -747,12 +747,8 @@ module_interface.menu_reset = function() {
     var temp_disease = g.medical_currentdisease;
     g.module_colorscale.modecurrent = 'Manual';
     module_interface.menu_pausePlay();
-    if ($('#select-'+g.geometry_keylist[0]).val() == 'NA') {
-        zoomToGeom(g.geometry_data[g.geometry_keylist[0]],g.viz_definition.multiadm.maps[g.geometry_keylist[0]]);
-    }else{
-        $('#select-'+g.geometry_keylist[0]).val('NA').change();
-    }
 
+    resetMapView();
     resetAllChartFilters();
 
     g.module_colorscale.modecurrent = temp_mode;

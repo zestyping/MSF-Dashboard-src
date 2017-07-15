@@ -40,7 +40,7 @@ modules_list.multiadm = true;
  * @type {Object} 
  * @alias module:g.module_multiadm
  */
-g.module_multiadm = {};
+g.module_multiadm = g.module_multiadm || {};
 
 // 1) Data Processing
 //------------------------------------------------------------------------------------

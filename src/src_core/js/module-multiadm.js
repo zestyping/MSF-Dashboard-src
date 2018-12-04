@@ -558,15 +558,15 @@ module_multiadm.interaction = function(){
 
 		} else {
 	        // Initialize first jumpto
-		    var html = '<select class="select-adm" id="select-admN1">';
-		    html +='<option value="NA">'+g.module_lang.text[g.module_lang.current].jumpto+' ('+g.module_lang.text[g.module_lang.current]['map_admN1'].title+')'+'</option>';
-		    g.medical_loclists.admN1.sort().forEach(function(loc){
+		    var html = '<select class="select-adm" id="select-admN4">';
+		    html +='<option value="NA">'+g.module_lang.text[g.module_lang.current].jumpto+' ('+g.module_lang.text[g.module_lang.current]['map_admN4'].title+')'+'</option>';
+		    g.medical_loclists.admN4.sort().forEach(function(loc){
 		        html +='<option value="'+loc+'">'+loc+'</option>';
 		    });
 		    html += '</select></div>';
-		    $('#map-admN1-jumpto').html(html);
+		    $('#map-admN4-jumpto').html(html);
 
-		    module_multiadm.propGoto('admN1',0);
+		    module_multiadm.propGoto('admN4',0);
 		}
 		
 	}

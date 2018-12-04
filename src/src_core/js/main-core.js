@@ -1628,7 +1628,7 @@ function generateDashboard(){
                 
                 g.viz_definition[key1].chart
                     .width(width)
-                    .height(350)
+                    .height(650)
                     .dimension(g.viz_definition[key1].dimension)
                     .group(g.viz_definition[key1].group)
                     .colors(color_list[0]);

@@ -256,7 +256,7 @@ module_getdata.process_geometry = function(){
         g.geometry_levellist[key] = keynum;     
         g.geometry_loclists[key] = [];
         g.geometry_data[key].features.forEach(function(f){  
-            var name = f.properties.name;
+            var name = f.properties.name || f.properties.mjumbe || '';
             g.geometry_loclists[key].push(name.trim());    //add it into the geometry_loclists
             g.geometry_loclists.all.push(name.trim());
           
@@ -444,7 +444,7 @@ module_getdata.load_medical_xls_file = function(path, specs, medical_data, extra
 
     /* Call XLSX */
     var workbook = XLSX.read(data, {type: 'binary'});
-    var input = workbook.Sheets['input'];
+    var input = workbook.Sheets['input'] || workbook.Sheets[workbook.SheetNames[0]];
     var lastCell = XLSX.utils.decode_range(input['!ref']).e; // .e for "end"
     var toAddr = XLSX.utils.encode_cell;
     var fromAddr = XLSX.utils.decode_cell;
@@ -463,6 +463,8 @@ module_getdata.load_medical_xls_file = function(path, specs, medical_data, extra
     }
     console.log('column headers found in ' + name + ':', colIndexes);
 
+    var filter = g.medical_data_filter || (function () { return true; });
+
     /* Get data rows */
     for (var r = 1; r <= lastCell.r; r++) {
         var dataRow = [];
@@ -480,8 +482,10 @@ module_getdata.load_medical_xls_file = function(path, specs, medical_data, extra
             for (var key in g.medical_headerlist) {
                 record[g.medical_headerlist[key]] = dataRow[colIndexes[key]];
             }
-            console.log('record ' + medical_data.length + ':', record);
-            medical_data.push(record);
+            if (filter(record)) {
+                console.log('record ' + medical_data.length + ':', record);
+                medical_data.push(record);
+            }
         }
     };
     console.log('finished loading records from ' + path);

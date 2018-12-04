@@ -256,43 +256,45 @@ module_getdata.process_geometry = function(){
         g.geometry_levellist[key] = keynum;     
         g.geometry_loclists[key] = [];
         g.geometry_data[key].features.forEach(function(f){  
-            g.geometry_loclists[key].push(f.properties.name.trim());    //add it into the geometry_loclists
-            g.geometry_loclists.all.push(f.properties.name.trim());
+            var name = f.properties.name || f.properties.mjumbe || '';
+            console.log('ward: ' + f.properties.ward + ' - ' + name);
+            g.geometry_loclists[key].push(name.trim());    //add it into the geometry_loclists
+            g.geometry_loclists.all.push(name.trim());
           
             // Compute number of Sub-Areas in Area
             if (g.new_layout) {
                 
                 if (!(module_multiadm.hasChildren(key))) {       //if it is lowest geometry - i.e. if it has no children
-                    g.geometry_subnum[f.properties.name.trim()] = 1 ;   //has 1 subarea/itself
+                    g.geometry_subnum[name.trim()] = 1 ;   //has 1 subarea/itself
                     var temp_key = module_multiadm.getParent(key);
                     var temp_loc = '';
                     while (temp_key != '') {
-                        temp_loc += ', ' + f.properties.name.trim().split(', ')[g.geometry_levellist[temp_key]].split('_').join(' ');  //add parent name to beginning
+                        temp_loc += ', ' + name.trim().split(', ')[g.geometry_levellist[temp_key]].split('_').join(' ');  //add parent name to beginning
                         g.geometry_subnum[temp_loc.substring(2, temp_loc.length)]++;    //add to g.geometry_subnum
                         temp_key = module_multiadm.getParent(temp_key);                 //get next parent up
                     }
 
                 } else {      //if it is not lowest geometry
-                    if (!(g.geometry_subnum[f.properties.name.trim()])) {       
-                        g.geometry_subnum[f.properties.name.trim()] = 0 ;
+                    if (!(g.geometry_subnum[name.trim()])) {       
+                        g.geometry_subnum[name.trim()] = 0 ;
                     }
                 }
 
             } else {    
 
                 if (keynum == g.geometry_keylist.length - 1) {        //if it is lowest geometry
-                    g.geometry_subnum[f.properties.name.trim()] = 1 ;       //full geometry name = 1 subarea/itself (e.g. temp_loc=admN1,admN2,admN3)
+                    g.geometry_subnum[name.trim()] = 1 ;       //full geometry name = 1 subarea/itself (e.g. temp_loc=admN1,admN2,admN3)
                     var temp_loc = '';
                     for (var i=0; i<=g.geometry_keylist.length-2; i++) {       //for each higher adm level
                        for (var j=0; j<=i; j++) {
-                            temp_loc += ', ' + f.properties.name.trim().split(', ')[j].split('_').join(' ');   //recreate geometry name(e.g. for admN2 name is admN1, admN2)
+                            temp_loc += ', ' + name.trim().split(', ')[j].split('_').join(' ');   //recreate geometry name(e.g. for admN2 name is admN1, admN2)
                         }
                         temp_loc = temp_loc.substring(2, temp_loc.length);
                         g.geometry_subnum[temp_loc]++;
                     }
 
                 } else {      //if it is not lowest geometry
-                    g.geometry_subnum[f.properties.name.trim()] = 0 ;
+                    g.geometry_subnum[name.trim()] = 0 ;
                 }
 
             }
@@ -443,7 +445,7 @@ module_getdata.load_medical_xls_file = function(path, specs, medical_data, extra
 
     /* Call XLSX */
     var workbook = XLSX.read(data, {type: 'binary'});
-    var input = workbook.Sheets['input'];
+    var input = workbook.Sheets['input'] || workbook.Sheets[workbook.SheetNames[0]];
     var lastCell = XLSX.utils.decode_range(input['!ref']).e; // .e for "end"
     var toAddr = XLSX.utils.encode_cell;
     var fromAddr = XLSX.utils.decode_cell;
@@ -462,6 +464,8 @@ module_getdata.load_medical_xls_file = function(path, specs, medical_data, extra
     }
     console.log('column headers found in ' + name + ':', colIndexes);
 
+    var filter = g.medical_data_filter || (function () { return true; });
+
     /* Get data rows */
     for (var r = 1; r <= lastCell.r; r++) {
         var dataRow = [];
@@ -479,8 +483,10 @@ module_getdata.load_medical_xls_file = function(path, specs, medical_data, extra
             for (var key in g.medical_headerlist) {
                 record[g.medical_headerlist[key]] = dataRow[colIndexes[key]];
             }
-            console.log('record ' + medical_data.length + ':', record);
-            medical_data.push(record);
+            if (filter(record)) {
+                console.log('record ' + medical_data.length + ':', record);
+                medical_data.push(record);
+            }
         }
     };
     console.log('finished loading records from ' + path);

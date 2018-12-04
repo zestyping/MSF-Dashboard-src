@@ -519,7 +519,7 @@ module_colorscale.lockcolor = function(source){
 		function sortNumber(a,b) {
 		    return a - b;
 		}
-		var unique_values = serie.getClassUniqueValues();
+		var unique_values = serie.getClassUniqueValues() || [];
 		if(g.module_colorscale.mapunitcurrent !== 'Completeness'){
 			unique_values.sort(sortNumber);
 		}

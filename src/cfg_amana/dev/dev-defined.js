@@ -115,15 +115,21 @@ g.module_colorscale.mapunitlist = ['Cases','Deaths','IncidenceProp','MortalityPr
  */
 g.module_getdata = {
     geometry: {
-        /*
-        admN0: {
-            method: 'geometryd3',
-            options: {url: './data/admin3.json', type: 'json'}
+        admN1: {
+            method:  'geometryd3',
+            options: {url: './data/districts.json', type: 'json'}
         },
-        */
+        admN2: {
+            method:  'geometryd3',
+            options: {url: './data/wards.json', type: 'json'}
+        },
+        admN3: {
+            method:  'geometryd3',
+            options: {url: './data/subwards.json', type: 'json'}
+        },
         admN4: {
             method:  'geometryd3',
-            options: {url: './data/shinas-subwards-2018-12-04c.json', type: 'json'}
+            options: {url: './data/shinas.json', type: 'json'}
         }
     },
     extralay: {
@@ -150,6 +156,13 @@ g.module_getdata = {
     }
     */
 };
+
+g.geometry_level_properties = [
+    'district',
+    'ward',
+    'subward',
+    'mjumbe'
+];
 
 /**
  Lists the keys used to refer to specific {@link module:g.medical_data} fields. It makes the link between headers in the data files and unambiguous keys used in the code.<br>

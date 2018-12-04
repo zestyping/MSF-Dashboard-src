@@ -181,7 +181,7 @@ g.module_lang.text.eng = {
 		title: 'Wards'
 	},
 	map_admN3: {
-		title: 'Villages'
+		title: 'Subwards'
 	},
 	map_admN4: {
 		title: 'Shinas'

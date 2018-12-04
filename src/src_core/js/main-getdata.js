@@ -257,43 +257,52 @@ module_getdata.process_geometry = function(){
         g.geometry_loclists[key] = [];
         g.geometry_data[key].features.forEach(function(f){  
             var name = f.properties.name || f.properties.mjumbe || '';
-            g.geometry_loclists[key].push(name.trim());    //add it into the geometry_loclists
-            g.geometry_loclists.all.push(name.trim());
-          
+            if (g.geometry_level_properties && g.geometry_level_properties.length > 0) {
+                var name_parts = [];
+                for (var i = 0; i <= keynum; i++) {
+                    name_parts[i] = (f.properties[g.geometry_level_properties[i]] || '').trim();
+                }
+                name = name_parts.join(', ');
+                f.properties.name = name;
+            }
+
+            g.geometry_loclists[key].push(name);    //add it into the geometry_loclists
+            g.geometry_loclists.all.push(name);
+
             // Compute number of Sub-Areas in Area
             if (g.new_layout) {
-                
+
                 if (!(module_multiadm.hasChildren(key))) {       //if it is lowest geometry - i.e. if it has no children
-                    g.geometry_subnum[name.trim()] = 1 ;   //has 1 subarea/itself
+                    g.geometry_subnum[name] = 1 ;   //has 1 subarea/itself
                     var temp_key = module_multiadm.getParent(key);
                     var temp_loc = '';
                     while (temp_key != '') {
-                        temp_loc += ', ' + name.trim().split(', ')[g.geometry_levellist[temp_key]].split('_').join(' ');  //add parent name to beginning
+                        temp_loc += ', ' + name.split(', ')[g.geometry_levellist[temp_key]].split('_').join(' ');  //add parent name to beginning
                         g.geometry_subnum[temp_loc.substring(2, temp_loc.length)]++;    //add to g.geometry_subnum
                         temp_key = module_multiadm.getParent(temp_key);                 //get next parent up
                     }
 
                 } else {      //if it is not lowest geometry
-                    if (!(g.geometry_subnum[name.trim()])) {       
-                        g.geometry_subnum[name.trim()] = 0 ;
+                    if (!(g.geometry_subnum[name])) {       
+                        g.geometry_subnum[name] = 0 ;
                     }
                 }
 
             } else {    
 
                 if (keynum == g.geometry_keylist.length - 1) {        //if it is lowest geometry
-                    g.geometry_subnum[name.trim()] = 1 ;       //full geometry name = 1 subarea/itself (e.g. temp_loc=admN1,admN2,admN3)
+                    g.geometry_subnum[name] = 1 ;       //full geometry name = 1 subarea/itself (e.g. temp_loc=admN1,admN2,admN3)
                     var temp_loc = '';
                     for (var i=0; i<=g.geometry_keylist.length-2; i++) {       //for each higher adm level
                        for (var j=0; j<=i; j++) {
-                            temp_loc += ', ' + name.trim().split(', ')[j].split('_').join(' ');   //recreate geometry name(e.g. for admN2 name is admN1, admN2)
+                            temp_loc += ', ' + name.split(', ')[j].split('_').join(' ');   //recreate geometry name(e.g. for admN2 name is admN1, admN2)
                         }
                         temp_loc = temp_loc.substring(2, temp_loc.length);
                         g.geometry_subnum[temp_loc]++;
                     }
 
                 } else {      //if it is not lowest geometry
-                    g.geometry_subnum[name.trim()] = 0 ;
+                    g.geometry_subnum[name] = 0 ;
                 }
 
             }

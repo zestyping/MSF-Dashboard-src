@@ -1459,7 +1459,7 @@ function generateDashboard(){
                             return feature.properties['name'];
                         })
 						.popup(function(feature){
-                            return feature.properties['name'];
+                            return feature.properties['name'].replace(/, /g, ' > ');
                         })
                         .renderPopup(true)
                         .featureOptions({

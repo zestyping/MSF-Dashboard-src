@@ -1,6 +1,6 @@
 {
 	"name": "MSF Dashboard",
-	"main": "src/cfg_nixon/index.html",
+	"main": "src/cfg_amana/index.html",
 	"window": {
 		"toolbar": true,
 		"height": 6000,

@@ -2141,7 +2141,7 @@ g.medical_data_fixers = {
         // Find the heading for the 3-letter prefix.
         var prefix = code.substring(0, 3);
         var heading = g.icd10_headings[prefix];
-        return prefix + ': ' + heading;
+        return heading ? prefix + ': ' + heading : prefix;
     }
 };
 

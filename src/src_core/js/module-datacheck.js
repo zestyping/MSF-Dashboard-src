@@ -304,10 +304,10 @@ epiwk: function(rec,key,none){
 			
 		},
 		empty: function(rec,key,none){
-			if(rec[g.medical_headerlist[key]] == undefined || rec[g.medical_headerlist[key]] == '_NA'){
+			if(rec[g.medical_headerlist[key]] === undefined || rec[g.medical_headerlist[key]] === '_NA'){
 				var cond_1 = true;
 			}else{
-				var cond_1 = rec[g.medical_headerlist[key]] == '';
+				var cond_1 = rec[g.medical_headerlist[key]] === '';
 			}
 			return cond_1;
 		},
@@ -892,8 +892,9 @@ module_datacheck.display = function(){
     var html = '';
 
     var n = g.medical_data.length;
+    var file_count = (g.medical_files || [0]).length;
     html += `<span class="record-count">${n} record${plural(n)}</span>`;
-    html += ` are found in the selected file${plural(g.medical_files.length)}.`;
+    html += ` are found in the selected file${plural(file_count)}.`;
 
 	// Content
 	var all_shared = [];

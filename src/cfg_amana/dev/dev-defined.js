@@ -140,11 +140,8 @@ g.module_getdata = {
     },
     medical: {
         medical: {
-            method: 'medicalxlsx',
-            options: {
-                url: './input/',
-                type: 'xlsx',
-            }
+            method: 'medicald3',
+            options: {url: './check_ins.csv', type: 'csv'}
         }
     }
     /*
@@ -2108,7 +2105,8 @@ g.icd10_codes = Object.keys(g.icd10_headings).sort();
 // Functions applied to the values in each field of the incoming data.
 g.medical_data_fixers = {
     age: function (value) {
-        value = (typeof value === 'number') ? value : -1;
+        value = value - 0;  // convert from string
+        if (isNaN(value)) value = -1;
         if (value < 0) value = -1;
         if (value > 120) value = -1;
         return value;
@@ -2119,13 +2117,18 @@ g.medical_data_fixers = {
             var date = new Date(excel_epoch.getTime() + (value * 86400 * 1000));
             return date.toISOString().substr(0, 10);
         }
-        if (typeof value === 'string') {  // sadly, assume d/m/y
-            var parts = value.split(/[.-/]/);
-            if (parts.length === 3) {
-                if (parts[2].length < 3) parts[2] = '20' + parts[2];
-                // JS counts months from 0 to 11, but days from 1 to 31.
-                var date = new Date(parts[2], parts[1] - 1, parts[0]);
-                return date.toISOString().substr(0, 10);
+        if (typeof value === 'string') {
+            var match = value.trim().match(/^(\d\d\d\d-\d\d-\d\d)\b/);
+            if (match) {
+                return match[0];
+            } else { // sadly, assume d/m/y
+                var parts = value.split(/[.-/]/);
+                if (parts.length === 3) {
+                    if (parts[2].length < 3) parts[2] = '20' + parts[2];
+                    // JS counts months from 0 to 11, but days from 1 to 31.
+                    var date = new Date(parts[2], parts[1] - 1, parts[0]);
+                    return date.toISOString().substr(0, 10);
+                }
             }
         }
         return value;

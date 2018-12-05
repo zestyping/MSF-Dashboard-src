@@ -87,6 +87,10 @@ module_getdata.load_propagate = function(){
                 if(!g[name]){g[name] = {};}
                 module_getdata.load_filed3(current_datasource.options.url,current_datasource.options.type,[name,current_dataname],module_getdata.load_propagate);
                 break;
+            case 'medicald3':
+                $(load_status).html('Loading medical data...');
+                module_getdata.load_filed3(current_datasource.options.url,current_datasource.options.type, 'medical_data', module_getdata.afterload_medical_d3);
+                break;
             case 'medicald3server':
                 $(load_status).html('Getting Local Medical files...');
                 module_getdata.load_medical_d3server(current_datasource.options.url,current_datasource.options.type);
@@ -138,19 +142,34 @@ module_getdata.load_propagate = function(){
 module_getdata.load_filed3 = function(file,filetype,save,exit_fun) {
 
     filetype = filetype || file.replace(/^.*\./, '');
-    if(filetype == 'txt' || filetype == 'TXT'){filetype = 'tsv';}
+    if (filetype == 'txt' || filetype == 'TXT') filetype = 'tsv';
 
     d3.queue()
         .defer(d3[filetype], file)
         .await(readfile);
 
-    function readfile(error,data) {
-        if(error){console.log(error);}
+    function readfile(error, data) {
+        if (error) console.log(error);
 
-        if(typeof save == 'string'){
-            g[save] = data;
-        }else if(save[0] && save[1]){
-            g[save[0]][save[1]] = data;
+        var fixers = g.medical_data_fixers || {};
+        var filter = g.medical_data_filter || (function () { return true; });
+
+        var records = [];
+        for (var i = 0; i < data.length; i++) {
+            var record = data[i];
+            for (var key in fixers) {
+                var field = g.medical_headerlist[key];
+                record[field] = fixers[key](record[field] || '');
+            }
+            if (filter(record)) {
+                records.push(record);
+            }
+        }
+
+        if (typeof save == 'string') {
+            g[save] = records;
+        } else if(save[0] && save[1]) {
+            g[save[0]][save[1]] = records;
         }
         exit_fun();
     }

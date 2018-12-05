@@ -113,6 +113,13 @@ g.module_colorscale.mapunitlist = ['Cases','Deaths','IncidenceProp','MortalityPr
  * @type {Object}
  * @alias module:g.module_getdata
  */
+
+var match = window.location.href.match(/[?&]days=([0-9]+)/) || [];
+var days = parseInt(match[1]);
+days = isNaN(days) ? 30 : days;
+var start_date = new Date((new Date()) - days * 24 * 3600 * 1000);
+var start_ymd = start_date.toISOString().substr(0, 10);
+
 g.module_getdata = {
     geometry: {
         admN1: {
@@ -141,7 +148,7 @@ g.module_getdata = {
     medical: {
         medical: {
             method: 'medicald3',
-            options: {url: './check_ins.csv', type: 'csv'}
+            options: {url: '/ehms/check_ins?start_date=' + start_ymd, type: 'csv'}
         }
     }
     /*

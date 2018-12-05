@@ -99,6 +99,13 @@ module_getdata.load_propagate = function(){
                 $(load_status).html('Getting Local Medical files...');
                 module_getdata.load_medical_d3noserver(current_datasource.options.url,current_datasource.options.type);
                 break;
+            case 'geometrydata':
+                $(load_status).html('Processing geometry data...');
+                var name = '' + current_datatype + '_data';
+                if(!g[name]){g[name] = {};}
+                g[name][current_dataname] = current_datasource.data;
+                module_getdata.afterload_geometry_d3();
+                break;
             case 'geometryd3':
                 $(load_status).html('Getting Local Geometry files...');
                 var name = '' + current_datatype + '_data';

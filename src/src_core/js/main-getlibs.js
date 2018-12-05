@@ -39,6 +39,7 @@ var files = [
     ['css','intro/introjs.css',lib_folder],
     ['js','intro/intro.js',lib_folder],
     ['js','lang/module-lang.js',ver_folder],
+    ['js', 'data/geometry.js',ver_folder],
     ['js','dev/dev-defined.js',ver_folder],
     ['css','css/module-lang.css',prg_folder],
     ['js','lib/dc.leaflet/dc.leaflet.js',prg_folder], // Exeption (third-party) DC-Leaflet Here as some text needs to be translated

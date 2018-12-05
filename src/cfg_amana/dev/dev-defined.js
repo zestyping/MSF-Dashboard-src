@@ -116,20 +116,20 @@ g.module_colorscale.mapunitlist = ['Cases','Deaths','IncidenceProp','MortalityPr
 g.module_getdata = {
     geometry: {
         admN1: {
-            method:  'geometryd3',
-            options: {url: './data/districts.json', type: 'json'}
+            method:  'geometrydata',
+            data: g.geometry.districts
         },
         admN2: {
-            method:  'geometryd3',
-            options: {url: './data/wards.json', type: 'json'}
+            method:  'geometrydata',
+            data: g.geometry.wards
         },
         admN3: {
-            method:  'geometryd3',
-            options: {url: './data/subwards.json', type: 'json'}
+            method:  'geometrydata',
+            data: g.geometry.subwards
         },
         admN4: {
-            method:  'geometryd3',
-            options: {url: './data/shinas.json', type: 'json'}
+            method:  'geometrydata',
+            data: g.geometry.shinas
         }
     },
     extralay: {
@@ -143,7 +143,7 @@ g.module_getdata = {
             method: 'medicalxlsx',
             options: {
                 url: './input/',
-                type: 'xlsx'
+                type: 'xlsx',
             }
         }
     }
@@ -2102,6 +2102,8 @@ g.icd10_headings = {
     "Z98": "Other postprocedural states",
     "Z99": "Dependence on enabling machines and devices, NEC"
 };
+
+g.icd10_codes = Object.keys(g.icd10_headings).sort();
 
 // Functions applied to the values in each field of the incoming data.
 g.medical_data_fixers = {

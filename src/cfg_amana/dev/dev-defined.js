@@ -148,7 +148,7 @@ g.module_getdata = {
     medical: {
         medical: {
             method: 'medicald3',
-            options: {url: '/ehms/check_ins?start_date=' + start_ymd, type: 'csv'}
+            options: {url: '../check_ins?start_date=' + start_ymd, type: 'csv'}
         }
     }
     /*

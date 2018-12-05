@@ -142,7 +142,7 @@ g.module_getdata = {
     extralay: {
         admN0: {
             method: 'd3',
-            options: {url: './data/empty.json', type: 'json'}
+            options: {url: 'cfg_amana/data/empty.json', type: 'json'}
         }
     },
     medical: {

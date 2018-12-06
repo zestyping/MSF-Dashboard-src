@@ -123,20 +123,20 @@ var start_ymd = start_date.toISOString().substr(0, 10);
 g.module_getdata = {
     geometry: {
         admN1: {
-            method:  'geometrydata',
-            data: g.geometry.districts
+            method:  'geometryd3',
+            options: {url: 'cfg_amana/data/districts.json', type: 'json'}
         },
         admN2: {
-            method:  'geometrydata',
-            data: g.geometry.wards
+            method:  'geometryd3',
+            options: {url: 'cfg_amana/data/wards.json', type: 'json'}
         },
         admN3: {
-            method:  'geometrydata',
-            data: g.geometry.subwards
+            method:  'geometryd3',
+            options: {url: 'cfg_amana/data/subwards.json', type: 'json'}
         },
         admN4: {
-            method:  'geometrydata',
-            data: g.geometry.shinas
+            method:  'geometryd3',
+            options: {url: 'cfg_amana/data/shinas.json', type: 'json'}
         }
     },
     extralay: {

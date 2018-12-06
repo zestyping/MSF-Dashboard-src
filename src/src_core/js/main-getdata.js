@@ -89,7 +89,7 @@ module_getdata.load_propagate = function(){
                 break;
             case 'medicald3':
                 $(load_status).html('Loading medical data...');
-                module_getdata.load_filed3(current_datasource.options.url,current_datasource.options.type, 'medical_data', module_getdata.afterload_medical_d3);
+                module_getdata.load_filed3(current_datasource.options.url,current_datasource.options.type, 'medical_data', module_getdata.afterload_medical_d3, true);
                 break;
             case 'medicald3server':
                 $(load_status).html('Getting Local Medical files...');
@@ -139,7 +139,7 @@ module_getdata.load_propagate = function(){
 --------------------------------------------------------------------*/
 
 // Load a files with d3: 'json', 'tsv', 'csv'
-module_getdata.load_filed3 = function(file,filetype,save,exit_fun) {
+module_getdata.load_filed3 = function(file,filetype,save,exit_fun,apply_medical_fixers) {
 
     filetype = filetype || file.replace(/^.*\./, '');
     if (filetype == 'txt' || filetype == 'TXT') filetype = 'tsv';
@@ -151,18 +151,20 @@ module_getdata.load_filed3 = function(file,filetype,save,exit_fun) {
     function readfile(error, data) {
         if (error) console.log(error);
 
-        var fixers = g.medical_data_fixers || {};
-        var filter = g.medical_data_filter || (function () { return true; });
-
-        var records = [];
-        for (var i = 0; i < data.length; i++) {
-            var record = data[i];
-            for (var key in fixers) {
-                var field = g.medical_headerlist[key];
-                record[field] = fixers[key](record[field] || '');
-            }
-            if (filter(record)) {
-                records.push(record);
+        var records = data;
+        if (apply_medical_fixers) {
+            var fixers = g.medical_data_fixers || {};
+            var filter = g.medical_data_filter || (function () { return true; });
+            records = [];
+            for (var i = 0; i < data.length; i++) {
+                var record = data[i];
+                for (var key in fixers) {
+                    var field = g.medical_headerlist[key];
+                    record[field] = fixers[key](record[field] || '');
+                }
+                if (filter(record)) {
+                    records.push(record);
+                }
             }
         }
 

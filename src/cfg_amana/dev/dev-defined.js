@@ -161,6 +161,10 @@ g.module_getdata = {
     */
 };
 
+// Don't wait for the user to click "Load dashboard"; just load it.
+g.module_datacheck = g.module_datacheck || {};
+g.module_datacheck.autoload = true;
+
 g.geometry_level_properties = [
     'district',
     'ward',

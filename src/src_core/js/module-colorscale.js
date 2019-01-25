@@ -568,7 +568,9 @@ module_colorscale.lockcolor = function(source){
 
         // The code above generates really confusing colour scales.
         // Instead, let's do something simple.
-        var scalesvalues_current = selectScaleValues(unique_values);
+		var intScale = (g.module_colorscale.mapunitcurrent !== 'IncidenceProp');
+        var scalesvalues_current = intScale ?
+            selectIntScaleValues(unique_values) : selectFloatScaleValues(unique_values);
 
 		// Pushes values (without duplicates)
 		g.module_colorscale.valuescurrent = ['NA'];
@@ -598,14 +600,52 @@ module_colorscale.nice_limits = function(val) {
 	return val;
 }
 
-function selectScaleValues(uniqueValues) {
-    var max = null;
-    uniqueValues.forEach(function (val) {
-        if (max === null || val > max) max = val;
-    });
+function selectIntScaleValues(values) {
+    if (!values || values.length == 0) {
+        return [0, 1];
+    }
+    var max = Math.max.apply(null, values);
     if (max < 5) {
         return [0, 1, 2, 3, 4].slice(0, max + 1);
     }
     var step = Math.ceil(max/4);
+    var shift = 1;
+    while (step >= 1) {
+        shift *= 10;
+        step /= 10;
+    }
+    step = niceCeiling(step) * shift;
     return [0, step, step*2, step*3, step*4];
+}
+
+function selectFloatScaleValues(values) {
+    if (!values || values.length == 0) {
+        return [0, 1];
+    }
+    var max = Math.max.apply(null, values);
+    var step = max/4;
+    var shift = 1;
+    while (step >= 1) {
+        shift *= 10;
+        step /= 10;
+    }
+    while (step < 0.1) {
+        shift /= 10;
+        step *= 10;
+    }
+    step = niceCeiling(step) * shift;
+    return [0, step, step*2, step*3, step*4];
+}
+
+function niceCeiling(step) {
+    if (step > 0.8) return 1;
+    else if (step > 0.6) return 0.8;
+    else if (step > 0.5) return 0.6;
+    else if (step > 0.4) return 0.5;
+    else if (step > 0.3) return 0.4;
+    else if (step > 0.25) return 0.3;
+    else if (step > 0.2) return 0.25;
+    else if (step > 0.15) return 0.2;
+    else if (step > 0.12) return 0.15;
+    else return 0.12;
 }

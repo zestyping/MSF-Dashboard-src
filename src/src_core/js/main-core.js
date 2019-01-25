@@ -1505,9 +1505,15 @@ function generateDashboard(){
                         
                         html += '<table style="margin-left: 5px; font-size:1em">';
                         var scale = g.module_colorscale.valuescurrent;
+                        var minVal, maxVal;
                         for(var i = scale.length - 1;i > 1;i--){
-                            var minVal = numberWithCommas((scale[i - 1] + 1).toFixed(precision));
-                            var maxVal = numberWithCommas(scale[i].toFixed(precision));
+                            if (precision > 0) {
+                                minVal = scale[i - 1].toFixed(precision);
+                                maxVal = scale[i].toFixed(precision);
+                            } else {
+                                minVal = numberWithCommas((scale[i - 1] + 1).toFixed(precision));
+                                maxVal = numberWithCommas(scale[i].toFixed(precision));
+                            }
 
 							html += '<tr><td><i style="background:' + g.module_colorscale.colors[g.module_colorscale.colorscurrent][i - 1] + '"></i></td>';
 							if (g.module_colorscale.mapunitcurrent == 'Completeness') {

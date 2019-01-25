@@ -63,7 +63,7 @@ g.medical_datatype = 'outbreak'; // 'outbreak' or 'surveillance'
  * @alias module:dev_defined.definition_incidence
  */
 g.dev_defined.definition_incidence = function(value,pop,periode) {
-    return value * 10000 / (pop * periode);
+    return value * 1000 / (pop * periode);
 };
 
 /**
@@ -93,7 +93,7 @@ if(!g.module_colorscale){
     g.module_colorscale = {};
 }
 
-g.module_colorscale.mapunitlist = ['Cases','Deaths','IncidenceProp','MortalityProp'];
+g.module_colorscale.mapunitlist = ['Cases','IncidenceProp'];
 //g.module_colorscale.mapunitlist = ['Cases','Deaths'];
 
 // Suppose you have k division levels, with boundaries in N GeoJSON files.
@@ -176,8 +176,8 @@ g.module_getdata = {
     },
     population: {
         pop: {
-            method: 'populationd3',
-            options: {url: './data/pop.csv', type: 'csv'}
+            method: 'populationgeometry',
+            options: {property: 'est_pop_from_buildings'}
         }
     }
 };

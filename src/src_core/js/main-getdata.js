@@ -82,37 +82,43 @@ module_getdata.load_propagate = function(){
       var current_datasource = getdata[current_datatype][current_dataname];
       switch(current_datasource.method){
             case 'd3':
-                $(load_status).html('Getting Local files...');
+                $(load_status).html('Loading local files...');
                 var name = '' + current_datatype + '_data';
                 if(!g[name]){g[name] = {};}
                 module_getdata.load_filed3(current_datasource.options.url,current_datasource.options.type,[name,current_dataname],module_getdata.load_propagate);
                 break;
             case 'medicald3server':
-                $(load_status).html('Getting Local Medical files...');
+                $(load_status).html('Loading local medical files...');
                 module_getdata.load_medical_d3server(current_datasource.options.url,current_datasource.options.type);
                 break;
             case 'medicalfs':
-                $(load_status).html('Getting Local Medical files...');
+                $(load_status).html('Loading local medical files...');
                 module_getdata.load_medical_fs(current_datasource.options.url,current_datasource.options.type);
                 break;
             case 'medicald3noserver':
-                $(load_status).html('Getting Local Medical files...');
+                $(load_status).html('Loading local medical files...');
                 module_getdata.load_medical_d3noserver(current_datasource.options.url,current_datasource.options.type);
                 break;
             case 'geometryd3':
-                $(load_status).html('Getting Local Geometry files...');
+                $(load_status).html('Loading local geometry files...');
                 var name = '' + current_datatype + '_data';
                 if(!g[name]){g[name] = {};}
                 module_getdata.load_filed3(current_datasource.options.url,current_datasource.options.type,[name,current_dataname],module_getdata.afterload_geometry_d3);
                 break;
+            case 'populationgeometry':
+                $(load_status).html('Loading population data from geometry...');
+                var name = '' + current_datatype + '_data';
+                if(!g[name]){g[name] = {};}
+                module_getdata.load_population_from_geometry(current_datasource.options.property);
+                break;
             case 'populationd3':
-                $(load_status).html('Getting Local Population files...');
+                $(load_status).html('Loading local population files...');
                 var name = '' + current_datatype + '_data';
                 if(!g[name]){g[name] = {};}
                 module_getdata.load_filed3(current_datasource.options.url,current_datasource.options.type,[name,current_dataname],module_getdata.afterload_population);
                 break;
             case 'medicalxlsx':
-                $(load_status).html('Getting Local Medical files...');
+                $(load_status).html('Loading local medical files...');
                 module_getdata.load_medical_xlsfolders(current_datasource.options.url, current_datasource.options);
                 break;
             default:
@@ -252,9 +258,11 @@ module_getdata.process_geometry = function(){
      * @alias module:g.geometry_subnum
      */
     g.geometry_subnum = {};
+    g.geometry_features = {};
     g.geometry_keylist.forEach(function(key,keynum){ 
         g.geometry_levellist[key] = keynum;     
         g.geometry_loclists[key] = [];
+        g.geometry_features[key] = {};
         g.geometry_data[key].features.forEach(function(f){  
             var name = f.properties.name || '';
             if (g.geometry_level_properties && g.geometry_level_properties.length > 0) {
@@ -266,6 +274,7 @@ module_getdata.process_geometry = function(){
                 f.properties.name = name;
             }
 
+            g.geometry_features[key][name] = f;
             g.geometry_loclists[key].push(name);    //add it into the geometry_loclists
             g.geometry_loclists.all.push(name);
 
@@ -313,6 +322,39 @@ module_getdata.process_geometry = function(){
 /*--------------------------------------------------------------------
     Data load options: Population
 --------------------------------------------------------------------*/
+
+module_getdata.load_population_from_geometry = function(prop) {
+    var popbyloc = {};
+    g.module_population.population_loclists = {};
+    g.module_population.population_databyloc = {pop: popbyloc};
+    g.module_population.population_keylist = Object.keys(g.module_getdata.population);
+
+    g.geometry_keylist.forEach(function(key) {
+        var unknowns = [];
+        var total = 0;
+        var count = 0;
+        for (var loc in g.geometry_features[key]) {
+            var feature = g.geometry_features[key][loc];
+            var pop = feature.properties[prop];
+            if (pop) {
+                popbyloc[loc] = pop;
+                total += pop;
+                count += 1;
+            } else {
+                unknowns.push(loc);
+            }
+        }
+        if (count > 0) {
+            // Crudely fill in any unknown population values with the
+            // average population of all other divisions at the same level.
+            unknowns.forEach(function(loc) {
+                popbyloc[loc] = total / count;
+            });
+        }
+    });
+
+    module_getdata.load_propagate();
+};
 
 module_getdata.afterload_population = function(data) {
     module_getdata.process_population();

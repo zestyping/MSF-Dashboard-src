@@ -65,6 +65,11 @@
     font-weight: bold;
 }
 
+#map-unit-buttons {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
 #map-text {
     margin-top: 10px;
 }
@@ -95,8 +100,8 @@
     margin-left: 4px;
     margin-bottom: 4px;
     cursor: pointer;
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
+    -webkit-transition-duration: 0.1s; /* Safari */
+    transition-duration: 0.1s;
 }
 
 .btn_map:hover {

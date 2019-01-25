@@ -71,6 +71,8 @@ module_multiadm.display = function(){
 	html += '<div id=buttons-multiadm></div>';
 	html += '</div></div>';
 
+    var strings = g.module_lang.text[g.module_lang.current];
+
 	// Title + filters
 	if (g.new_layout) {		
 		html += '<div class="row">';
@@ -79,19 +81,19 @@ module_multiadm.display = function(){
 		} else {
 			html += '<div class="col-md-7" id="map-title">';
 		};
-		html += '<span id="map-unit" class="map-unit-title">'+g.module_lang.text[g.module_lang.current].map_unit_title[g.module_colorscale.mapunitcurrent]+'</span>';
+		html += '<span id="map-unit" class="map-unit-title">'+strings.map_unit_title[g.module_colorscale.mapunitcurrent]+'</span>';
 		
 		//Map unit buttons (i.e. Cases, Deaths, Incidence Rate, Mortality Rate, Completeness)
 		g.module_colorscale.mapunitlist.forEach(function(unit,unitnum) {
 			if (unitnum == 0) {
-				var text = g.module_lang.text[g.module_lang.current].colorscale_unitintro;
+				var text = strings.colorscale_unitintro;
 			} else {
 				var text = '';
 			};
 			if (unit == g.module_colorscale.mapunitcurrent) {
-				html += '<button id='+unit+' class="btn_map button_mapunit on">'+g.module_lang.text[g.module_lang.current].map_unit[unit]+'</button>';
+				html += '<button id='+unit+' class="btn_map button_mapunit on">'+strings.map_unit[unit]+'</button>';
 			} else {
-				html += '<button id='+unit+' class="btn_map button_mapunit">'+g.module_lang.text[g.module_lang.current].map_unit[unit]+'</button>';
+				html += '<button id='+unit+' class="btn_map button_mapunit">'+strings.map_unit[unit]+'</button>';
 			};
 		});
 		html += '</div>';
@@ -101,18 +103,18 @@ module_multiadm.display = function(){
 		} else {
 			html += '<div class="col-md-3" id="map-text">';
 		}
-		html += '<span class="map-text">'+g.module_lang.text[g.module_lang.current].map_viewby_text+'</span><br>'; 
+		html += '<span class="map-text">'+strings.map_viewby_text+'</span><br>'; 
 		g.geometry_keylist.forEach(function(key,keynum){
 			if (keynum == 0) {
-				html += '<button id="map-'+key+'-btn" class="btn_map button_mapadm on">'+g.module_lang.text[g.module_lang.current]['map_'+key].title+'</button>';
+				html += '<button id="map-'+key+'-btn" class="btn_map button_mapadm on">'+strings['map_'+key].title+'</button>';
 			} else {
-				html += '<button id="map-'+key+'-btn" class="btn_map button_mapadm">'+g.module_lang.text[g.module_lang.current]['map_'+key].title+'</button>';
+				html += '<button id="map-'+key+'-btn" class="btn_map button_mapadm">'+strings['map_'+key].title+'</button>';
 			}			
 		});
 		html += '</div>';
 
 		html += '<div class="col-md-2">';
-		html += '<span class="map-text">'+g.module_lang.text[g.module_lang.current].map_quickzoom_text+'</span><br>'; 
+		html += '<span class="map-text">'+strings.map_quickzoom_text+'</span><br>'; 
 					
 		g.geometry_keylist.forEach(function(key,keynum){
 			html +=  '<div class="list-content" id="map-'+key+'-jumpto"></div>';
@@ -120,7 +122,13 @@ module_multiadm.display = function(){
 		html += '</div></div>';
 
 	} else {
-		html += '<b>'+g.module_lang.text[g.module_lang.current].map_title+' - <small><span id="map-unit">'+g.module_lang.text[g.module_lang.current].map_unit[g.module_colorscale.mapunitcurrent]+'</b></span></small> | '+g.module_lang.text[g.module_lang.current].filtext +' ';
+		html += '<b>'+strings.map_title+'</b> <span id="map-unit-buttons">';
+        g.module_colorscale.mapunitlist.forEach(function(unit) {
+            var on = (unit == g.module_colorscale.mapunitcurrent);
+            html += '<button id=' + unit + ' class="btn_map button_mapunit ' +
+                (on ? 'on' : '') + '">' + strings.map_unit[unit] + '</button>';
+        });
+        html += '</span> '+strings.filtext + ' ';
 		g.geometry_keylist.forEach(function(key,keynum,keylist){
 			html +=  '<span id="map-'+key+'-filter"></span>';
 			if (!(keynum == keylist.length - 1)) {
@@ -139,8 +147,8 @@ module_multiadm.display = function(){
 			html +=  '<div id="map-'+key+'-tab" class="'+tab_status+' tab">';
 			
 			// Tab title
-                        var strings = g.module_lang.text[g.module_lang.current]['map_' + key] || {};
-			html +=  '<div class="col-md-7 tab-content">'+strings.title+'</div>';
+            var tab = strings['map_' + key] || {};
+			html +=  '<div class="col-md-7 tab-content">'+tab.title+'</div>';
 			
 			// 'jumpto' dropdown list
 			html +=  '<div class="col-md-5 tab-content" id="map-'+key+'-jumpto"></div>';
@@ -758,7 +766,7 @@ module_multiadm.mapunit_interaction = function() {
           	module_colorscale.changeMapColors();
 			module_colorscale.lockcolor('Manual');
 
-			$('#map-unit').html(g.module_lang.text[g.module_lang.current].map_unit_title[g.module_colorscale.mapunitcurrent]);  //map title
+			$('#map-unit').html(g.module_lang.text[g.module_lang.current].map_unit[g.module_colorscale.mapunitcurrent]);  //map title
 		}
 
 	};

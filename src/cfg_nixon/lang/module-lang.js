@@ -165,7 +165,7 @@ g.module_lang.text.eng = {
 	map_hover: 'Hover to display',
 	map_unit: {
 		Cases: 'Number of Cases',
-		IncidenceProp: 'Incidence Rate (/10,000 people)',
+		IncidenceProp: 'Incidence per 1,000',
 		Deaths: 'Number of Deaths',
 		MortalityProp: 'Mortality Rate (/10,000 people)',
 		Completeness: 'Frequency structures report, in %'

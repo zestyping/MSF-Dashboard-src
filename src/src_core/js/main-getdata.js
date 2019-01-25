@@ -256,7 +256,7 @@ module_getdata.process_geometry = function(){
         g.geometry_levellist[key] = keynum;     
         g.geometry_loclists[key] = [];
         g.geometry_data[key].features.forEach(function(f){  
-            var name = f.properties.name || f.properties.mjumbe || '';
+            var name = f.properties.name || '';
             if (g.geometry_level_properties && g.geometry_level_properties.length > 0) {
                 var name_parts = [];
                 for (var i = 0; i <= keynum; i++) {

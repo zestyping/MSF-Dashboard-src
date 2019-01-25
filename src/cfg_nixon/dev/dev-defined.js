@@ -92,8 +92,26 @@ g.dev_defined.ignore_empty = true;
 if(!g.module_colorscale){
     g.module_colorscale = {};
 }
+
 g.module_colorscale.mapunitlist = ['Cases','Deaths','IncidenceProp','MortalityProp'];
 //g.module_colorscale.mapunitlist = ['Cases','Deaths'];
+
+// Suppose you have k division levels, with boundaries in N GeoJSON files.
+// 1.  Put keys in g.module_getdata.geometry named admN1, admN2, ... admNk
+//     that describe how to load the corresponding GeoJSON files.
+// 2.  Set g.geometry_level_properties to a list of k items, where each item
+//     is the name of the property (in each GeoJSON feature's properties)
+//     in which that administrative division's name is found.
+// 3.  In g.medical_headerlist, put k keys named admN1, admN2, ... admNk
+//     with the spreadsheet header names for the corresponding division levels.
+// 4.  In g.module_datacheck.definition_value, add k keys named admN1 ... admNk
+//     all with the same value {test_type: 'ingeometry', setup: 'none'}.
+// 5.  In g.module_lang.text.eng, put keys named map_admN1 ... map_admNk,
+//     each with the value {title: '[level']} where [level] is the plural
+//     English string to show in the UI for that division level's tab.
+// 6.  In g.module_datacheck.definition_record, add an item of the form:
+//     {key: g.medical_headerlist.admN1, isnumber: false} for each level,
+//     admN1 ... admNk.
 
 /**
  * Defines the data parsed in the dashboard (urls and sources type). Order matters.<br>
@@ -115,21 +133,23 @@ g.module_colorscale.mapunitlist = ['Cases','Deaths','IncidenceProp','MortalityPr
  */
 g.module_getdata = {
     geometry: {
-        /*
-        admN0: {
-            method: 'geometryd3',
-            options: {url: './data/admin3.json', type: 'json'}
-        },
-        */
         admN1: {
+            method: 'geometryd3',
+            options: {url: './data/adm2pop.json', type: 'json'}
+        },
+        admN2: {
             method:  'geometryd3',
-            options: {url: './data/nixon4.json', type: 'json'}
+            options: {url: './data/adm3pop.json', type: 'json'}
+        },
+        admN3: {
+            method:  'geometryd3',
+            options: {url: './data/adm4pop.json', type: 'json'}
         }
     },
     extralay: {
         admN0: {
             method: 'd3',
-            options: {url: './data/admin3.json', type: 'json'}
+            options: {url: './data/empty.json', type: 'json'}
         }
     },
     medical: {
@@ -162,6 +182,14 @@ g.module_getdata = {
     }
 };
 
+// Names of the feature properties that contain the names of administrative
+// divisions, corresponding to the levels listed in g.module_getdata.geometry.
+g.geometry_level_properties = [
+    'admin2Name',  // g.module_getdata.geometry.admN1
+    'admin3Name',  // g.module_getdata.geometry.admN2
+    'admin4Name'   // g.module_getdata.geometry.admN3
+];
+
 /**
  Lists the keys used to refer to specific {@link module:g.medical_data} fields. It makes the link between headers in the data files and unambiguous keys used in the code.<br>
  Each element in the object is coded in the following way:
@@ -175,8 +203,9 @@ g.medical_headerlist = {
     date: 'Date',           // Date of presentation at hospital
     name: 'Patient Name',   // Name
     id: 'OP No',            // Outpatient ID number
-    admN0: 'Chiefdom',      // Administrative division level 0
-    admN1: 'Section',       // Administrative division level 1
+    admN1: 'District',      // Corresponds to g.module_getdata.geometry.admN1
+    admN2: 'Chiefdom',      // Corresponds to g.module_getdata.geometry.admN2
+    admN3: 'Section',       // Corresponds to g.module_getdata.geometry.admN3
     age: 'Age',             // Age of patient in years
     sex: 'Sex',             // Sex (M or F)
     diagnosis: 'Diagnosis',
@@ -262,6 +291,8 @@ function main_loadfiles_readvar(){
 g.module_datacheck = g.module_datacheck || {};
 g.module_datacheck.definition_value = {
     admN1: {test_type: 'ingeometry', setup: 'none'},
+    admN2: {test_type: 'ingeometry', setup: 'none'},
+    admN3: {test_type: 'ingeometry', setup: 'none'},
     age: {test_type: 'integer', setup: 'none'},
     sex: {test_type: 'inlist', setup: ['M', 'F']},
 };
@@ -287,8 +318,9 @@ g.medical_diseaseslist = ['dummy']; // One disease (not empty)
 g.module_datacheck.definition_record = [
     {key: g.medical_headerlist.date, isnumber: false},
     {key: g.medical_headerlist.id, isnumber: false},
-    {key: g.medical_headerlist.admN0, isnumber: false},
     {key: g.medical_headerlist.admN1, isnumber: false},
+    {key: g.medical_headerlist.admN2, isnumber: false},
+    {key: g.medical_headerlist.admN3, isnumber: false},
 ];
 
 // 3) Chart parameters

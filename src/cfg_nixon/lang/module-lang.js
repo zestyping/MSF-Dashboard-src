@@ -171,17 +171,17 @@ g.module_lang.text.eng = {
 		Completeness: 'Frequency structures report, in %'
 	},
 	jumpto: 'Goto...',
-	map_admN0: {
-		title: 'Chiefdoms'
-	},
 	map_admN1: {
-		title: 'Sections'
+		title: 'Districts'
 	},
 	map_admN2: {
-		title: 'Villages'
-	},/* 
+		title: 'Chiefdoms'
+	},
 	map_admN3: {
-		title: 'Cellule'
+		title: 'Sections'
+	},/* 
+	map_admN4: {
+		title: 'Villages'
 	}, */
 	
 	colorscale_title: 'MAP PARAMETERS',

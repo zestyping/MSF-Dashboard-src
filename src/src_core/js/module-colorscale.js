@@ -501,12 +501,7 @@ module_colorscale.lockcolor = function(source){
 			var admvalues_current = [100,80,60,40,20,0];
 		} else { 
 			var admvalues_current = Object.keys(g.viz_currentvalues[admlevel_current]).map(function (key,keynum,keylist) {
-				if(keynum == keylist.length - 1){
-					var temp = g.viz_currentvalues[admlevel_current][key];
-				}else{
-					var temp = module_colorscale.nice_limits(g.viz_currentvalues[admlevel_current][key]);
-				}
-				return temp;
+				return g.viz_currentvalues[admlevel_current][key];
 			});
 			
 			var admvalues_current = admvalues_current.filter(function(element) {
@@ -605,17 +600,17 @@ function selectIntScaleValues(values) {
         return [0, 1];
     }
     var max = Math.max.apply(null, values);
-    if (max < 5) {
-        return [0, 1, 2, 3, 4].slice(0, max + 1);
+    if (max < 6) {
+        return [0, 1, 2, 3, 4, 5].slice(0, max + 1);
     }
-    var step = Math.ceil(max/4);
+    var step = Math.ceil(max/5);
     var shift = 1;
     while (step >= 1) {
         shift *= 10;
         step /= 10;
     }
     step = niceCeiling(step) * shift;
-    return [0, step, step*2, step*3, step*4];
+    return [0, step, step*2, step*3, step*4, step*5];
 }
 
 function selectFloatScaleValues(values) {
@@ -623,7 +618,7 @@ function selectFloatScaleValues(values) {
         return [0, 1];
     }
     var max = Math.max.apply(null, values);
-    var step = max/4;
+    var step = max/5;
     var shift = 1;
     while (step >= 1) {
         shift *= 10;
@@ -634,7 +629,7 @@ function selectFloatScaleValues(values) {
         step *= 10;
     }
     step = niceCeiling(step) * shift;
-    return [0, step, step*2, step*3, step*4];
+    return [0, step, step*2, step*3, step*4, step*5];
 }
 
 function niceCeiling(step) {

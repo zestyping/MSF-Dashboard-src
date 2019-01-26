@@ -207,13 +207,19 @@ epiwk: function(rec,key,none){
 			var cond_3 = week > 0 && week < 54;
 			return cond_1 && cond_2 && cond_3;
 		},
-		date: function(rec,key,none){
+		date: function(rec,key,year_range){
+            var year_min = 1;
+            var year_max = 9999;
+            try {
+                year_min = year_range[0] - 0;
+                year_max = year_range[1] - 0;
+            } catch (e) { }
 			var value = rec[g.medical_headerlist[key]];
 			var year = value.split('-')[0];
 			var month = value.split('-')[1];
 			var day = value.split('-')[2];
 			var cond_1 = (year.length == 4) && (month.length == 2) && (day.length == 2);
-			var cond_2 = year > 0;
+			var cond_2 = year >= year_min && year <= year_max;
 			var cond_3 = month > 0 && month < 13;
 			var cond_4 = day > 0 && day < 32;
 			var now = new Date();
@@ -638,8 +644,6 @@ epiwk: function(rec,key,none){
 		} 
 	}
 
-	var empty_recs = [];
-
 	module_datacheck.getSharedAttributes = function() {    //returns list of shared attributes, e.g. admN2 & hosp both share PHU
 		var shared = [];
 		for (var head1 in g.medical_headerlist) {
@@ -673,9 +677,11 @@ epiwk: function(rec,key,none){
 	};
 
 	// Data browse
+    var recnums_to_delete = [];
 	g.medical_data.forEach(function(rec,recnum){		//for each record in medical_data
+        var delete_record = false;
 		var error_temp = false;
-		var empty_temp = true;
+		var all_fields_empty = true;
 		var test_duplicate = module_datacheck.testrecord.duplicate(rec);
 		module_datacheck.errorlogging(!(test_duplicate),'duplicate','',rec);
 
@@ -703,19 +709,24 @@ epiwk: function(rec,key,none){
 			};
 
 			var is_empty = module_datacheck.testvalue.empty(rec,key,'none');
+            var spec = g.module_datacheck.definition_value[key];
 			if (is_empty) {														//if its empty log it
 				module_datacheck.errorlogging(!(is_empty),'empty',key,rec);
-				if(g.dev_defined.ignore_empty == false){error_temp = true;}		//if ignore_empty is true then don't add it 
+                if (spec.delete_on_empty) delete_record = true;
+				if(g.dev_defined.ignore_empty == false) {
+                    error_temp = true;
+                    if (spec.delete_on_error) delete_record = true;
+                }
 			} else {
-                var spec = g.module_datacheck.definition_value[key];
 				if (spec && (key !== 'disease' || !g.module_datacheck.diseasecheck)) {  
 					var test_value = module_datacheck.testvalue[spec.test_type](rec, key, spec.setup);
 					module_datacheck.errorlogging(test_value, spec.test_type, key, rec);
 					
 					if (!test_value) {
 						error_temp = true;
+                        if (spec.delete_on_error) delete_record = true;
 					} else {
-						empty_temp = false;
+						all_fields_empty = false;
 					}
 				}
 
@@ -743,17 +754,18 @@ epiwk: function(rec,key,none){
 			g.medical_diseaseslist.push(toTitleCase(rec[g.medical_headerlist.disease].trim().split('_').join(' ')));
 		}
 
-		if(empty_temp){
-			empty_recs.push(recnum);
-		}
-		
+        if (!delete_record && !all_fields_empty) {
+            // valid
+        } else {
+            recnums_to_delete.push(recnum);
+        }
 	});
 
-	console.log('module-datacheck.js ~l530: Empty records: ', empty_recs);
-	for (var i = empty_recs.length - 1; i >= 0; i--) {
-		g.medical_data.splice(empty_recs[i],1);
-	}
-
+    var all_count = g.medical_data.length;
+    for (var i = recnums_to_delete.length - 1; i >= 0; i--) {
+        g.medical_data.splice(recnums_to_delete[i], 1);
+    }
+    console.log('module-datacheck.js: Kept ' + g.medical_data.length + ' of ' + all_count + ' records');
 }
 
 /**

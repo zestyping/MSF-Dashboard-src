@@ -295,6 +295,7 @@ g.module_datacheck.definition_value = {
     admN3: {test_type: 'ingeometry', setup: 'none'},
     age: {test_type: 'integer', setup: 'none'},
     sex: {test_type: 'inlist', setup: ['M', 'F']},
+    date: {test_type: 'date', setup: [2010, 2030], delete_on_error: true}
 };
 
 /**
@@ -515,11 +516,12 @@ g.global_filter = {
         g.viz_definition.diagnosis.chart.colors('#e66');
 
         var extras = g.medical_data.extras || {};
+        var diagnosis_all_values = extras.diagnosis_all_values || [];
 
         var all_values = [];
         var default_values = [];
-        for (var i = 0; i < extras.diagnosis_all_values.length; i++) {
-            var value = extras.diagnosis_all_values[i];
+        for (var i = 0; i < diagnosis_all_values.length; i++) {
+            var value = diagnosis_all_values[i];
             if (value) {
                 if (all_values.indexOf(value) === -1) {
                     all_values.push(value);

@@ -39,7 +39,8 @@ function generate_display() {
     html += '<div class="file-select">';
 	if (g.medical_filelist) {
 		html += '<h3>' + loc.loadfiles_choose + '</h3>';
-        html += '<select multiple class="select-lf" id="selectform" size=8>';
+        html += '<p>Select one or more files.';
+        html += '<p><select multiple class="select-lf" id="selectform" size=8>';
 		g.medical_filelist.forEach(function(f) {
             sel = g.medical_files.indexOf(f) >= 0 ? ' selected': '';
 			html +='<option value="' + f + '"' + sel + '>' + f + '</option>';
@@ -49,7 +50,12 @@ function generate_display() {
     html += '</div>';
 
     html += '<div class="file-details">';
+    html += '<div id="datacheck-working" class="invisible">';
+    html += 'Inspecting the selected data...';
+    html += '</div>';
+    html += '<div id="datacheck-results">';
 	html += module_datacheck.display();
+	html += '</div>';
 	html += '</div>';
 
 	html += '<div class="row"><div class="col-md-12"><p><br><button class="select-lf" id="loaddashboard">' + loc.loadfiles_load + '</button></p></div></div>';
@@ -57,8 +63,13 @@ function generate_display() {
 	$('.modal-content').html(html);
 
 	$("#selectform").change(function(){
-		g.medical_files = $('#selectform').val();
-		module_getdata.reload_medical();
+        $('#datacheck-working').removeClass('invisible');
+        $('#datacheck-results').addClass('invisible');
+        // Use setTimeout to give the DOM a chance to render the change.
+        setTimeout(function() {
+    		g.medical_files = $('#selectform').val();
+    		module_getdata.reload_medical();
+        }, 100);
 	});
 
 

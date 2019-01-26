@@ -105,7 +105,7 @@ module_lang.display = function() {
 //--------------------------------------------------------------------------
 
 g.module_lang.text.eng = {
-	main_title: 'MSF Dashboard \u00b7 Nixon Memorial Hospital v1.3',
+	main_title: 'MSF Dashboard \u00b7 Nixon Memorial Hospital v1.4',
 	main_description: 'For feedback or questions, please contact the MSF UK Manson Unit at <a href="mailto:gis.mansonunit@london.msf.org">gis.mansonunit@london.msf.org</a>.',
 
 	loadfiles_choose: 'Choose data files to load',
